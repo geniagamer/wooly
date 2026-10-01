@@ -444,7 +444,10 @@ $('adRevive').addEventListener('click',async()=>{
   // devuelve las estrellas de esta partida: se vuelven a sumar al terminar
   wallet-=lastEarned;save('borrego_wallet',wallet);lastEarned=0;
   revived=true;state='play';show(null);$('hud').hidden=false;
-  sheep.dead=false;sheep.x=W/2;sheep.vx=0;sheep.y=camY+H*.85;sheep.vy=-BOOST*1.1;sheep.sq=.6;invuln=2.5;
+  // nube de rescate abajo de la pantalla, y el borrego sale disparado desde ella
+  const rescueY=camY+H*.82;
+  plats.push({x:W/2-70,y:rescueY,w:140,type:'n',ph:0});
+  sheep.dead=false;sheep.x=W/2;sheep.vx=0;sheep.y=rescueY;sheep.vy=-BOOST;sheep.sq=.6;invuln=2.5;dragId=null;
   foes=foes.filter(f=>f.kind!=='meteor'&&Math.abs(f.y-(camY+H*.5))>H*.6);
   puff(sheep.x,sheep.y,16,'#ffd23f');sfx.star();startMusic();
 });
@@ -520,6 +523,7 @@ function buildShop(){
 /* ---------- actualización ---------- */
 function update(dt){
   time+=dt;
+  if(state==='over')return; // pantalla final: todo se queda congelado donde se cayó
   if(state!=='play'){ // borrego del menú rebotando
     if(!sheep)reset();
     sheep.vy+=G*dt; sheep.y+=sheep.vy*dt;
