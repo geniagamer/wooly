@@ -2,6 +2,7 @@ name: Compilar APK de Wooly
 
 on:
   push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
