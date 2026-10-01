@@ -1,0 +1,842 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#1b2140"></head><body>
+<title>Wooly</title>
+<style>
+/* Una sola pantalla: el cielo es el juego; HUD, menús y tienda flotan encima. */
+:root{
+  --ink:#24304f;
+  --wool:#fffdf7;
+  --sun:#ffc93c;
+  --sky:#6fbbf2;
+  --btn:#ff7a59;
+  --btn-ink:#fff;
+  --soft:#eaf5ff;
+  --round: ui-rounded, "SF Pro Rounded", "Nunito", "Trebuchet MS", system-ui, sans-serif;
+  color-scheme: light;
+}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0;background:#1b2140;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+#game{position:relative;height:100%;max-width:520px;margin:0 auto;background:var(--sky);overflow:hidden;font-family:var(--round);color:var(--ink)}
+canvas{display:block}
+#c{width:100%;height:100%}
+.hud{position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:flex-start;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 0;pointer-events:none}
+.alt{display:flex;flex-direction:column;line-height:1}
+.alt small{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;opacity:.75}
+.alt b{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums;text-shadow:0 2px 0 rgba(255,255,255,.55)}
+.hud.dark .alt{color:#fff}
+.hud.dark .alt b{text-shadow:0 2px 0 rgba(0,0,0,.35)}
+.right{display:flex;gap:8px;align-items:center;pointer-events:auto}
+.pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.85);border-radius:999px;padding:6px 12px;font-weight:800;font-variant-numeric:tabular-nums;font-size:16px}
+.pill i,.st{color:#e0a100;font-style:normal}
+.icon-btn{border:0;background:rgba(255,255,255,.85);border-radius:999px;width:36px;height:36px;font-size:16px;color:var(--ink);cursor:pointer;font-family:inherit;font-weight:800}
+.icon-btn:focus-visible,.go:focus-visible,.item button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:calc(env(safe-area-inset-top,0px) + 16px) 16px calc(env(safe-area-inset-bottom,0px) + 16px);text-align:center;background:rgba(27,33,64,.3)}
+.card{background:var(--wool);border-radius:28px;padding:24px 20px 20px;max-width:330px;width:100%;box-sizing:border-box;box-shadow:0 10px 0 rgba(36,48,79,.25);display:flex;flex-direction:column;gap:12px;align-items:center;max-height:100%;overflow:auto}
+h1{margin:0;font-size:40px;line-height:.95;font-weight:900;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:60px}
+h1 span{display:block;color:var(--btn);font-size:16px;font-weight:800;letter-spacing:.02em;margin-top:6px}
+h2{margin:0;font-size:28px;font-weight:900}
+.card p{margin:0;font-size:15px;line-height:1.4;max-width:30ch}
+.big{font-size:52px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+.big small{font-size:20px}
+.zone-lbl{font-size:14px;font-weight:800;opacity:.7}
+.row{display:flex;gap:18px;justify-content:center;font-weight:700;font-size:14px}
+.row b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
+.go{border:0;background:var(--btn);color:var(--btn-ink);font:inherit;font-weight:900;font-size:20px;padding:14px 34px;border-radius:999px;box-shadow:0 5px 0 #c9502f;cursor:pointer}
+.go:active{transform:translateY(4px);box-shadow:0 1px 0 #c9502f}
+.go.alt2{background:var(--soft);color:var(--ink);box-shadow:0 4px 0 #b9cfe6;font-size:16px;padding:10px 22px}
+.go.alt2:active{box-shadow:0 1px 0 #b9cfe6}
+.btns{display:flex;flex-direction:column;align-items:center;gap:12px}
+.tips{display:flex;gap:10px;width:100%}
+.tips div{flex:1;background:var(--soft);border-radius:14px;padding:8px 6px;font-size:12px;font-weight:700;line-height:1.3}
+.tips div span{display:block;font-size:20px}
+.tips.drag .tipTap,.tips.tap .tipDrag{display:none}
+.tips .tipDrag{flex:2}
+.tips em{font-style:normal}
+.opts{display:flex;align-items:center;gap:8px;font-weight:800;font-size:13px}
+#lang{border:0;background:var(--soft);color:var(--ink);font:inherit;font-weight:800;font-size:14px;padding:8px 12px;border-radius:999px;cursor:pointer}
+#lang:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.new{background:var(--sun);border-radius:999px;padding:3px 12px;font-size:13px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.earn{font-weight:900;font-size:16px}
+.adrow{display:flex;gap:10px;width:100%}
+.sens{display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:800;font-size:13px;width:100%}
+.seg{display:flex;background:var(--soft);border-radius:999px;padding:3px;gap:2px;width:100%;max-width:270px}
+.seg button{flex:1;border:0;background:none;border-radius:999px;padding:7px 4px;font:inherit;font-weight:800;font-size:13px;color:var(--ink);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.seg button:focus-visible{outline:3px solid var(--btn);outline-offset:1px}
+.ad-btn{flex:1;border:0;border-radius:18px;padding:10px 8px;background:var(--sun);color:var(--ink);font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:0 4px 0 #c99a1c}
+.ad-btn b{font-size:15px;font-weight:900;line-height:1.15}
+.ad-btn small{font-size:11px;font-weight:800;opacity:.75}
+.ad-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #c99a1c}
+.ad-btn[disabled]{opacity:.45;cursor:default}
+.ad-btn:focus-visible,.link:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.link{border:0;background:none;color:var(--ink);font:inherit;font-size:12px;font-weight:700;text-decoration:underline;opacity:.7;cursor:pointer}
+/* tienda */
+.shop h2{font-size:26px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%}
+.item{background:var(--soft);border-radius:18px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:800;font-size:14px;border:3px solid transparent}
+.item.on{border-color:var(--btn)}
+.item canvas{width:96px;height:80px}
+.item button{border:0;border-radius:999px;padding:7px 12px;font:inherit;font-weight:900;font-size:13px;cursor:pointer;background:var(--ink);color:#fff;min-width:88px}
+.item button.buy{background:var(--sun);color:var(--ink)}
+.item button[disabled]{opacity:.45;cursor:default}
+.item button.using{background:var(--btn)}
+/* aviso de zona */
+.banner{position:absolute;left:0;right:0;top:28%;display:flex;flex-direction:column;align-items:center;pointer-events:none;color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.3);animation:ban 2.4s ease forwards}
+.banner small{font-size:14px;font-weight:900;letter-spacing:.2em;text-transform:uppercase}
+.banner b{font-size:42px;font-weight:900;padding:0 16px;text-wrap:balance;text-align:center;line-height:1.05}
+@keyframes ban{0%{opacity:0;transform:scale(.7)}12%{opacity:1;transform:scale(1.05)}20%{transform:scale(1)}80%{opacity:1}100%{opacity:0;transform:translateY(-20px)}}
+@media (prefers-reduced-motion: reduce){.go:active{transform:none}.banner{animation:none}}
+</style>
+
+<div id="game">
+  <canvas id="c" data-i18n-aria="canvas" aria-label="Juego: borrego que salta hacia el cielo"></canvas>
+  <div class="hud" id="hud" hidden>
+    <div class="alt"><small id="zoneName">Pradera</small><b id="h">0 m</b></div>
+    <div class="right"><div class="pill"><i>★</i><span id="s">0</span></div><button class="icon-btn mute" aria-label="Silenciar">♪</button></div>
+  </div>
+  <div class="banner" id="banner" hidden><small id="banZ">Zona 2</small><b id="banN">Cielo alto</b></div>
+
+  <div class="screen" id="menu">
+    <div class="card">
+      <h1>Wooly<span data-i18n="tag">el borrego que salta al cielo</span></h1>
+      <p data-i18n="intro">Rebota de nube en nube y llega lo más alto que puedas.</p>
+      <div class="tips drag" id="tips">
+        <div class="tipDrag"><span>◀ ▶</span><em data-i18n="tipDrag">Desliza el dedo a los lados</em></div>
+        <div class="tipTap"><span>◀</span><em data-i18n="tipL">Toca a la izquierda</em></div>
+        <div class="tipTap"><span>▶</span><em data-i18n="tipR">Toca a la derecha</em></div>
+        <div><span class="st">★</span><em data-i18n="tipS">Estrella = súper salto</em></div>
+      </div>
+      <p style="font-size:13px;opacity:.8" data-i18n="warn">Cinco zonas, cada una con sus peligros. A los pájaros y murciélagos puedes caerles encima. A los meteoritos no.</p>
+      <div class="btns">
+        <button class="go" id="play" data-i18n="play">¡A saltar!</button>
+        <button class="go alt2" id="shopBtn1" data-i18n="skins">Disfraces</button>
+      </div>
+      <div class="row"><div><span data-i18n="best">Récord</span><b id="best0">0 m</b></div><div><span data-i18n="yourStars">Tus estrellas</span><b><span class="st">★</span> <span class="walletTxt">0</span></b></div></div>
+      <div class="sens" role="group" aria-labelledby="ctrlLbl"><span id="ctrlLbl" data-i18n="ctrl">Control</span><div class="seg" id="ctrlSeg"><button data-c="0" data-i18n="mDrag">Deslizar</button><button data-c="1" data-i18n="mTap">Tocar lados</button></div></div>
+      <div class="sens" role="group" aria-labelledby="sensLbl"><span id="sensLbl" data-i18n="sens">Sensibilidad</span><div class="seg" id="sensSeg"><button data-s="0" data-i18n="sLow">Baja</button><button data-s="1" data-i18n="sNormal">Normal</button><button data-s="2" data-i18n="sHigh">Alta</button></div></div>
+      <div class="opts"><label for="lang" data-i18n="lang">Idioma</label><select id="lang"></select><button class="icon-btn mute" aria-label="Silenciar" style="background:var(--soft)">♪</button></div>
+      <button class="link" id="privacyBtn" hidden data-i18n="privacy">Privacidad</button>
+    </div>
+  </div>
+
+  <div class="screen" id="over" hidden>
+    <div class="card">
+      <h2 id="overT">¡Se cayó!</h2>
+      <div class="big" id="fh">0<small> m</small></div>
+      <div class="zone-lbl" id="fz">Llegaste a: Pradera</div>
+      <span class="new" id="newRec" hidden data-i18n="newRec">Nuevo récord</span>
+      <div class="row"><div><span data-i18n="starsLbl">Estrellas</span><b id="fs">0</b></div><div><span data-i18n="points">Puntos</span><b id="fp">0</b></div><div><span data-i18n="best">Récord</span><b id="fb">0 m</b></div></div>
+      <div class="earn"><span data-i18n="earned">Ganaste</span> <span class="st">★</span> <span id="fe">0</span> · <span data-i18n="have">tienes</span> <span class="st">★</span> <span class="walletTxt">0</span></div>
+      <div class="btns">
+        <div class="adrow" id="adRow" hidden>
+          <button class="ad-btn" id="adRevive"><b data-i18n="revive">Revivir</b><small>▶ <span data-i18n="watch">Ver anuncio</span></small></button>
+          <button class="ad-btn" id="adDouble"><b data-i18n="double">×2 estrellas</b><small>▶ <span data-i18n="watch">Ver anuncio</span></small></button>
+        </div>
+        <div class="zone-lbl" id="adMsg" hidden data-i18n="adFail">El anuncio no cargó.</div>
+        <button class="go" id="again" data-i18n="again">Otra vez</button>
+        <button class="go alt2" id="shopBtn2" data-i18n="skins">Disfraces</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="shop" hidden>
+    <div class="card shop">
+      <h2 data-i18n="skins">Disfraces</h2>
+      <div class="pill" style="background:var(--soft)"><i>★</i><span class="walletTxt">0</span></div>
+      <p style="font-size:13px" data-i18n="shopHint">Gana estrellas atrapándolas en el cielo, y una más por cada 100 m que subas.</p>
+      <div class="grid" id="grid"></div>
+      <button class="go" id="shopBack" data-i18n="done">Listo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(()=>{
+const cv=document.getElementById('c'), ctx=cv.getContext('2d');
+const $=id=>document.getElementById(id);
+const W=360;
+let H=640, S=1, DPR=1;
+const G=1650, JUMP=780, BOOST=1400, PX_PER_M=10;
+// sensibilidad: velocidad lateral máxima y qué tan rápido acelera
+const SENS=[{speed:170,acc:4.5},{speed:225,acc:6},{speed:300,acc:9}];
+// deslizar: k = qué tan rápido sigue al dedo, max = velocidad máxima
+const DRAG=[{k:4,max:260},{k:6,max:340},{k:9,max:440}];
+
+function resize(){
+  const r=cv.getBoundingClientRect();
+  DPR=Math.min(window.devicePixelRatio||1,3);
+  S=r.width/W; H=r.height/S;
+  cv.width=Math.round(r.width*DPR); cv.height=Math.round(r.height*DPR);
+}
+addEventListener('resize',resize); resize();
+
+/* ---------- guardado ---------- */
+function load(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+let best=+load('borrego_best',0)||0;
+let wallet=+load('borrego_wallet',0)||0;
+let owned=load('borrego_owned',['clasico']);
+let skinId=load('borrego_skin','clasico');
+let muted=!!load('borrego_muted',false);
+let ctrl=+load('borrego_ctrl',0)===1?1:0;
+let sens=Math.min(2,Math.max(0,+load('borrego_sens',1)||0));
+
+/* ---------- idiomas ---------- */
+const LANGS={
+  es:{name:'Español',tag:'el borrego que salta al cielo',intro:'Rebota de nube en nube y llega lo más alto que puedas.',tipL:'Toca a la izquierda',tipR:'Toca a la derecha',tipS:'Estrella = súper salto',warn:'Cinco zonas, cada una con sus peligros. A los pájaros y murciélagos puedes caerles encima. A los meteoritos no.',play:'¡A saltar!',skins:'Disfraces',best:'Récord',yourStars:'Tus estrellas',fall:'¡Se cayó!',ouch:'¡Auch!',wow:'¡Qué altura!',reached:'Llegaste a: ',newRec:'Nuevo récord',starsLbl:'Estrellas',points:'Puntos',earned:'Ganaste',have:'tienes',again:'Otra vez',shopHint:'Gana estrellas atrapándolas en el cielo, y una más por cada 100 m que subas.',done:'Listo',revive:'Revivir',double:'×2 estrellas',watch:'Ver anuncio',privacy:'Privacidad',adFail:'El anuncio no cargó. Intenta en un momento.',sens:'Sensibilidad',sLow:'Baja',sNormal:'Normal',sHigh:'Alta',ctrl:'Control',mDrag:'Deslizar',mTap:'Tocar lados',tipDrag:'Desliza el dedo a los lados',zone:'Zona',worn:'Puesto',use:'Usar',missing:n=>`Te faltan ${n} estrellas`,mute:'Silenciar',unmute:'Activar sonido',canvas:'Juego: borrego que salta hacia el cielo',lang:'Idioma',
+    zones:['Pradera','Cielo alto','Atardecer','Noche','Espacio'],skinN:['Clásico','Oveja negra','Algodón','Vaquero','Rey','Arcoíris','Astronauta','Dorado']},
+  en:{name:'English',tag:'the sheep who jumps to the sky',intro:'Bounce from cloud to cloud and climb as high as you can.',tipL:'Tap left',tipR:'Tap right',tipS:'Star = super jump',warn:'Five zones, each with its own dangers. You can land on birds and bats. Not on meteors.',play:'Jump!',skins:'Costumes',best:'Best',yourStars:'Your stars',fall:'It fell!',ouch:'Ouch!',wow:'What a height!',reached:'You reached: ',newRec:'New record',starsLbl:'Stars',points:'Points',earned:'You earned',have:'you have',again:'Play again',shopHint:'Earn stars by catching them in the sky, plus one for every 100 m you climb.',done:'Done',revive:'Revive',double:'×2 stars',watch:'Watch an ad',privacy:'Privacy',adFail:'The ad didn’t load. Try again in a moment.',sens:'Sensitivity',sLow:'Low',sNormal:'Normal',sHigh:'High',ctrl:'Controls',mDrag:'Slide',mTap:'Tap sides',tipDrag:'Slide your finger left and right',zone:'Zone',worn:'Wearing',use:'Use',missing:n=>`You need ${n} more stars`,mute:'Mute',unmute:'Turn sound on',canvas:'Game: a sheep jumping up to the sky',lang:'Language',
+    zones:['Meadow','High Sky','Sunset','Night','Space'],skinN:['Classic','Black Sheep','Cotton Candy','Cowboy','King','Rainbow','Astronaut','Golden']},
+  pt:{name:'Português',tag:'a ovelhinha que pula até o céu',intro:'Pule de nuvem em nuvem e suba o mais alto que puder.',tipL:'Toque à esquerda',tipR:'Toque à direita',tipS:'Estrela = superpulo',warn:'Cinco zonas, cada uma com seus perigos. Você pode cair em cima dos pássaros e morcegos. Dos meteoros, não.',play:'Pular!',skins:'Fantasias',best:'Recorde',yourStars:'Suas estrelas',fall:'Caiu!',ouch:'Ai!',wow:'Que altura!',reached:'Você chegou a: ',newRec:'Novo recorde',starsLbl:'Estrelas',points:'Pontos',earned:'Ganhou',have:'você tem',again:'De novo',shopHint:'Ganhe estrelas pegando-as no céu, e mais uma a cada 100 m que subir.',done:'Pronto',revive:'Reviver',double:'×2 estrelas',watch:'Ver anúncio',privacy:'Privacidade',adFail:'O anúncio não carregou. Tente de novo daqui a pouco.',sens:'Sensibilidade',sLow:'Baixa',sNormal:'Normal',sHigh:'Alta',ctrl:'Controle',mDrag:'Deslizar',mTap:'Tocar lados',tipDrag:'Deslize o dedo para os lados',zone:'Zona',worn:'Usando',use:'Usar',missing:n=>`Faltam ${n} estrelas`,mute:'Silenciar',unmute:'Ativar som',canvas:'Jogo: ovelhinha pulando até o céu',lang:'Idioma',
+    zones:['Campo','Céu alto','Pôr do sol','Noite','Espaço'],skinN:['Clássica','Ovelha negra','Algodão-doce','Caubói','Rei','Arco-íris','Astronauta','Dourada']},
+  fr:{name:'Français',tag:'le mouton qui saute jusqu’au ciel',intro:'Rebondis de nuage en nuage et monte le plus haut possible.',tipL:'Touche à gauche',tipR:'Touche à droite',tipS:'Étoile = super saut',warn:'Cinq zones, chacune avec ses dangers. Tu peux sauter sur les oiseaux et les chauves-souris. Pas sur les météorites.',play:'On saute !',skins:'Costumes',best:'Record',yourStars:'Tes étoiles',fall:'Il est tombé !',ouch:'Aïe !',wow:'Quelle hauteur !',reached:'Tu as atteint : ',newRec:'Nouveau record',starsLbl:'Étoiles',points:'Points',earned:'Gagné',have:'tu as',again:'Rejouer',shopHint:'Gagne des étoiles en les attrapant dans le ciel, plus une tous les 100 m.',done:'OK',revive:'Revivre',double:'×2 étoiles',watch:'Voir une pub',privacy:'Confidentialité',adFail:'La pub n’a pas chargé. Réessaie dans un instant.',sens:'Sensibilité',sLow:'Basse',sNormal:'Normale',sHigh:'Haute',ctrl:'Contrôles',mDrag:'Glisser',mTap:'Toucher les côtés',tipDrag:'Fais glisser ton doigt à gauche et à droite',zone:'Zone',worn:'Porté',use:'Mettre',missing:n=>`Il te manque ${n} étoiles`,mute:'Couper le son',unmute:'Activer le son',canvas:'Jeu : un mouton qui saute vers le ciel',lang:'Langue',
+    zones:['Prairie','Haut du ciel','Coucher de soleil','Nuit','Espace'],skinN:['Classique','Mouton noir','Barbe à papa','Cowboy','Roi','Arc-en-ciel','Astronaute','Doré']},
+  de:{name:'Deutsch',tag:'das Schaf, das in den Himmel springt',intro:'Hüpf von Wolke zu Wolke und komm so hoch wie möglich.',tipL:'Links tippen',tipR:'Rechts tippen',tipS:'Stern = Supersprung',warn:'Fünf Zonen mit eigenen Gefahren. Auf Vögel und Fledermäuse kannst du springen. Auf Meteore nicht.',play:'Los geht’s!',skins:'Kostüme',best:'Rekord',yourStars:'Deine Sterne',fall:'Abgestürzt!',ouch:'Autsch!',wow:'Was für eine Höhe!',reached:'Erreicht: ',newRec:'Neuer Rekord',starsLbl:'Sterne',points:'Punkte',earned:'Verdient',have:'du hast',again:'Nochmal',shopHint:'Fang Sterne am Himmel und bekomm einen extra für je 100 m Höhe.',done:'Fertig',revive:'Wiederbeleben',double:'×2 Sterne',watch:'Werbung ansehen',privacy:'Datenschutz',adFail:'Die Werbung hat nicht geladen. Versuch es gleich nochmal.',sens:'Empfindlichkeit',sLow:'Niedrig',sNormal:'Normal',sHigh:'Hoch',ctrl:'Steuerung',mDrag:'Wischen',mTap:'Seiten tippen',tipDrag:'Wisch mit dem Finger nach links und rechts',zone:'Zone',worn:'An',use:'Anziehen',missing:n=>`Dir fehlen ${n} Sterne`,mute:'Ton aus',unmute:'Ton an',canvas:'Spiel: ein Schaf springt in den Himmel',lang:'Sprache',
+    zones:['Wiese','Hoher Himmel','Abendrot','Nacht','Weltraum'],skinN:['Klassisch','Schwarzes Schaf','Zuckerwatte','Cowboy','König','Regenbogen','Astronaut','Golden']},
+  it:{name:'Italiano',tag:'la pecorella che salta fino al cielo',intro:'Rimbalza di nuvola in nuvola e sali più in alto che puoi.',tipL:'Tocca a sinistra',tipR:'Tocca a destra',tipS:'Stella = super salto',warn:'Cinque zone, ognuna con i suoi pericoli. Puoi saltare su uccelli e pipistrelli. Sui meteoriti no.',play:'Salta!',skins:'Costumi',best:'Record',yourStars:'Le tue stelle',fall:'È caduta!',ouch:'Ahi!',wow:'Che altezza!',reached:'Sei arrivato a: ',newRec:'Nuovo record',starsLbl:'Stelle',points:'Punti',earned:'Hai vinto',have:'ne hai',again:'Ancora',shopHint:'Guadagna stelle prendendole in cielo, più una ogni 100 m di salita.',done:'Fatto',revive:'Rinasci',double:'×2 stelle',watch:'Guarda la pubblicità',privacy:'Privacy',adFail:'La pubblicità non si è caricata. Riprova tra poco.',sens:'Sensibilità',sLow:'Bassa',sNormal:'Normale',sHigh:'Alta',ctrl:'Controlli',mDrag:'Scorri',mTap:'Tocca i lati',tipDrag:'Scorri il dito a destra e a sinistra',zone:'Zona',worn:'Indossato',use:'Usa',missing:n=>`Ti mancano ${n} stelle`,mute:'Disattiva audio',unmute:'Attiva audio',canvas:'Gioco: una pecorella che salta verso il cielo',lang:'Lingua',
+    zones:['Prato','Cielo alto','Tramonto','Notte','Spazio'],skinN:['Classica','Pecora nera','Zucchero filato','Cowboy','Re','Arcobaleno','Astronauta','Dorata']},
+  ja:{name:'日本語',tag:'空までジャンプするひつじ',intro:'雲から雲へはねて、できるだけ高くのぼろう。',tipL:'左をタップ',tipR:'右をタップ',tipS:'星 = スーパージャンプ',warn:'5つのゾーンにそれぞれ危険がいっぱい。鳥とコウモリは踏めるけど、隕石はダメ。',play:'ジャンプ！',skins:'きせかえ',best:'ベスト',yourStars:'星の数',fall:'落ちちゃった！',ouch:'いたっ！',wow:'すごい高さ！',reached:'到達：',newRec:'新記録',starsLbl:'星',points:'ポイント',earned:'獲得',have:'所持',again:'もう一回',shopHint:'空で星をつかまえよう。100mのぼるごとに1つもらえるよ。',done:'OK',revive:'復活',double:'星×2',watch:'広告を見る',privacy:'プライバシー',adFail:'広告を読み込めませんでした。少し待ってからもう一度どうぞ。',sens:'感度',sLow:'低',sNormal:'中',sHigh:'高',ctrl:'操作',mDrag:'スライド',mTap:'左右タップ',tipDrag:'指を左右にスライド',zone:'ゾーン',worn:'着用中',use:'着る',missing:n=>`星があと${n}個必要`,mute:'ミュート',unmute:'サウンドON',canvas:'ゲーム：空へジャンプするひつじ',lang:'言語',
+    zones:['草原','高い空','夕焼け','夜','宇宙'],skinN:['クラシック','黒ひつじ','わたあめ','カウボーイ','王さま','にじいろ','宇宙飛行士','ゴールド']},
+  ko:{name:'한국어',tag:'하늘까지 점프하는 양',intro:'구름에서 구름으로 튕기며 최대한 높이 올라가세요.',tipL:'왼쪽 터치',tipR:'오른쪽 터치',tipS:'별 = 슈퍼 점프',warn:'다섯 구역마다 위험이 있어요. 새와 박쥐는 밟을 수 있지만 운석은 안 돼요.',play:'점프!',skins:'코스튬',best:'최고 기록',yourStars:'내 별',fall:'떨어졌어요!',ouch:'아야!',wow:'엄청 높아요!',reached:'도달: ',newRec:'새 기록',starsLbl:'별',points:'점수',earned:'획득',have:'보유',again:'다시 하기',shopHint:'하늘에서 별을 잡고, 100m 올라갈 때마다 별 1개를 더 받아요.',done:'완료',revive:'부활',double:'별 ×2',watch:'광고 보기',privacy:'개인정보',adFail:'광고를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.',sens:'감도',sLow:'낮음',sNormal:'보통',sHigh:'높음',ctrl:'조작',mDrag:'밀기',mTap:'좌우 터치',tipDrag:'손가락을 좌우로 밀어요',zone:'구역',worn:'착용 중',use:'착용',missing:n=>`별이 ${n}개 더 필요해요`,mute:'음소거',unmute:'소리 켜기',canvas:'게임: 하늘로 점프하는 양',lang:'언어',
+    zones:['초원','높은 하늘','노을','밤','우주'],skinN:['클래식','검은 양','솜사탕','카우보이','왕','무지개','우주비행사','황금']},
+};
+function detectLang(){
+  const saved=load('borrego_lang',null); if(saved&&LANGS[saved])return saved;
+  for(const l of (navigator.languages||[navigator.language||'en'])){const c=String(l).slice(0,2).toLowerCase();if(LANGS[c])return c}
+  return 'en';
+}
+let lang=detectLang();
+const t=k=>LANGS[lang][k]??LANGS.es[k];
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n));
+  document.querySelectorAll('[data-i18n-aria]').forEach(e=>e.setAttribute('aria-label',t(e.dataset.i18nAria)));
+  if(typeof setMuteIcons==='function')setMuteIcons();
+}
+
+/* ---------- disfraces ---------- */
+const SKINS=[
+  {id:'clasico', name:'Clásico',     price:0,   wool:'#fffdf7',line:'#3a4466',face:'#2e2a3d'},
+  {id:'negra',   name:'Oveja negra', price:10,  wool:'#57506a',line:'#1f1b2b',face:'#1b1726'},
+  {id:'algodon', name:'Algodón',     price:20,  wool:'#ffd1dc',line:'#9c4a64',face:'#2e2a3d'},
+  {id:'vaquero', name:'Vaquero',     price:30,  wool:'#fffdf7',line:'#3a4466',face:'#2e2a3d',hat:'cowboy'},
+  {id:'rey',     name:'Rey',         price:45,  wool:'#fffdf7',line:'#3a4466',face:'#2e2a3d',hat:'crown'},
+  {id:'arcoiris',name:'Arcoíris',    price:60,  wool:'rainbow',line:'#3a4466',face:'#2e2a3d'},
+  {id:'astro',   name:'Astronauta',  price:80,  wool:'#e9eef7',line:'#3a4466',face:'#2e2a3d',hat:'helmet'},
+  {id:'dorado',  name:'Dorado',      price:120, wool:'#ffd766',line:'#a86f00',face:'#5a3b00',hat:'sparkle'},
+];
+const skinOf=id=>SKINS.find(s=>s.id===id)||SKINS[0];
+if(!owned.includes(skinId))skinId='clasico';
+
+/* ---------- zonas (niveles) ---------- */
+const ZONES=[
+  {m:0,   n:'Pradera'},
+  {m:300, n:'Cielo alto'},
+  {m:1000,n:'Atardecer'},
+  {m:2000,n:'Noche'},
+  {m:3200,n:'Espacio'},
+];
+const zoneAt=m=>{let z=0;for(let i=0;i<ZONES.length;i++)if(m>=ZONES[i].m)z=i;return z};
+
+/* ---------- sonido y música ---------- */
+let ac=null;
+function audio(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume()}catch(e){}return ac}
+function tone(f1,f2,d,type,v,t0){
+  if(muted||!audio())return;
+  try{
+    const o=ac.createOscillator(),g=ac.createGain(),t=t0??ac.currentTime;
+    o.type=type;o.frequency.setValueAtTime(f1,t);if(f2!==f1)o.frequency.exponentialRampToValueAtTime(f2,t+d);
+    g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0008,t+d);
+    o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d+.02);
+  }catch(e){}
+}
+const sfx={
+  jump:()=>tone(320,640,.12,'triangle',.12),
+  star:()=>{tone(600,1400,.25,'square',.06);setTimeout(()=>tone(900,1800,.2,'triangle',.06),80)},
+  crack:()=>tone(200,60,.18,'sawtooth',.05),
+  stomp:()=>tone(500,150,.15,'square',.07),
+  hit:()=>tone(400,80,.5,'sawtooth',.08),
+  baa:()=>tone(520,470,.35,'sawtooth',.05),
+  buy:()=>{tone(660,660,.1,'square',.06);setTimeout(()=>tone(990,990,.18,'square',.06),100)},
+  zone:()=>{[0,4,7,12].forEach((n,i)=>setTimeout(()=>tone(523*2**(n/12),523*2**(n/12),.18,'square',.05),i*90))},
+};
+// música: secuenciador de 32 pasos que cambia de tono y velocidad por zona
+const MEL=[0,4,7,12,9,7,4,7, 5,9,12,9,7,-99,4,-99, 0,4,7,12,14,12,9,7, 5,4,2,4,0,-99,-99,-99];
+const BASS=[0,0,5,5,0,0,7,7];
+const ZROOT=[0,2,5,-3,-1], ZBPM=[132,140,146,120,150], ZMINOR=[0,0,0,1,1];
+let musicOn=false, mStep=0, mNext=0, mTimer=null, zone=0;
+function mf(semi){return 392*2**(semi/12)}
+function schedule(){
+  if(!musicOn||!ac||muted)return;
+  const spb=60/ZBPM[zone]/2;
+  while(mNext<ac.currentTime+.2){
+    let n=MEL[mStep];
+    if(n>-50){ if(ZMINOR[zone]){if(n%12===4)n-=1;if(n%12===9)n-=1} tone(mf(n+ZROOT[zone]),mf(n+ZROOT[zone]),spb*.9,'square',.028,mNext)}
+    if(mStep%4===0){const b=BASS[mStep>>2];tone(mf(b+ZROOT[zone]-24),mf(b+ZROOT[zone]-24),spb*3.5,'triangle',.07,mNext)}
+    if(mStep%2===1)tone(1800,1200,.03,'square',.008,mNext);
+    mNext+=spb;mStep=(mStep+1)%32;
+  }
+}
+function startMusic(){if(muted||!audio())return;musicOn=true;mStep=0;mNext=ac.currentTime+.08;if(!mTimer)mTimer=setInterval(schedule,40)}
+function stopMusic(){musicOn=false;clearInterval(mTimer);mTimer=null}
+function setMuteIcons(){document.querySelectorAll('.mute').forEach(b=>{b.textContent=muted?'✕':'♪';b.setAttribute('aria-label',muted?t('unmute'):t('mute'))})}
+setMuteIcons();
+const langSel=$('lang');
+for(const [code,L] of Object.entries(LANGS)){const o=document.createElement('option');o.value=code;o.textContent=L.name;langSel.append(o)}
+langSel.value=lang;
+langSel.addEventListener('change',()=>{lang=langSel.value;save('borrego_lang',lang);applyLang()});
+applyLang();
+function setSens(v){sens=v;save('borrego_sens',v);document.querySelectorAll('#sensSeg button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.s===v?'true':'false'))}
+document.querySelectorAll('#sensSeg button').forEach(b=>b.addEventListener('click',()=>setSens(+b.dataset.s)));
+setSens(sens);
+function setCtrl(v){ctrl=v;save('borrego_ctrl',v);document.querySelectorAll('#ctrlSeg button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.c===v?'true':'false'));$('tips').className='tips '+(v===0?'drag':'tap')}
+document.querySelectorAll('#ctrlSeg button').forEach(b=>b.addEventListener('click',()=>setCtrl(+b.dataset.c)));
+setCtrl(ctrl);
+setTimeout(()=>adsInit(),0);
+document.querySelectorAll('.mute').forEach(b=>{
+  b.addEventListener('pointerdown',e=>e.stopPropagation());
+  b.addEventListener('click',()=>{muted=!muted;save('borrego_muted',muted);setMuteIcons();if(muted)stopMusic();else if(state==='play')startMusic()});
+});
+document.addEventListener('visibilitychange',()=>{
+  last=performance.now();
+  try{if(document.hidden)ac&&ac.suspend();else ac&&ac.resume()}catch(e){}
+});
+
+/* ---------- estado ---------- */
+let state='menu', sheep, plats, stars, foes, parts, camY, maxH, bonus, starsN, genY, time=0, shake=0, meteorT=3, last=performance.now();
+const keys={l:0,r:0}, ptrs=new Map();
+
+function reset(){
+  sheep={x:W/2,y:0,vx:0,vy:-JUMP,sq:1,face:1,dead:false,blink:0};
+  plats=[{x:-40,y:0,w:W+80,type:'g'}];
+  stars=[];foes=[];parts=[];
+  camY=-H*0.72; maxH=0; bonus=0; starsN=0; genY=0; shake=0; zone=0; meteorT=3;
+  revived=false; doubled=false; lastEarned=0; invuln=0;
+  gen();
+}
+function rnd(a,b){return a+Math.random()*(b-a)}
+
+function gen(){
+  while(genY>camY-H*0.5){
+    const m=-genY/PX_PER_M;
+    const gap=rnd(58,88+Math.min(80,m*0.06));        // salto máximo ≈ 184 px
+    genY-=gap;
+    const w=Math.max(54,82-m*0.012);
+    let type='n';
+    if(m>250&&Math.random()<Math.min(.4,m/2500))type='m';
+    const p={x:rnd(0,W-w),y:genY,w,type,dir:Math.random()<.5?-1:1,sp:rnd(50,70+Math.min(60,m*.02)),ph:Math.random()*9};
+    plats.push(p);
+    if(m>120&&Math.random()<Math.min(.35,m/2000)){
+      plats.push({x:rnd(0,W-w),y:genY+gap*.5,w,type:'f',ph:Math.random()*9});
+    }
+    if(m>25&&type==='n'&&Math.random()<.085){
+      stars.push({x:p.x+p.w/2,y:p.y-30,ph:Math.random()*6,got:false});
+    }
+    const d=Math.random()<.5?-1:1;
+    // pájaros: cielo alto y atardecer
+    if(m>180&&m<2200&&Math.random()<Math.min(.12,m/6000)){
+      foes.push({kind:'bird',x:rnd(20,W-20),y:genY+gap*.5,vx:d*rnd(60,110+Math.min(80,m*.02)),vy:0,dead:false,ph:Math.random()*6});
+    }
+    // murciélagos: noche y espacio
+    if(m>1900&&Math.random()<Math.min(.16,(m-1900)/3000+.06)){
+      const y0=genY+gap*.5;
+      foes.push({kind:'bat',x:rnd(20,W-20),y:y0,y0,vx:d*rnd(70,120),vy:0,dead:false,ph:Math.random()*6});
+    }
+  }
+}
+
+function puff(x,y,n,col){for(let i=0;i<n;i++)parts.push({x,y,vx:rnd(-90,90),vy:rnd(-60,40),r:rnd(3,7),life:1,col})}
+
+/* ---------- entrada ---------- */
+const gameEl=$('game');
+function side(e){const r=gameEl.getBoundingClientRect();return (e.clientX-r.left)<r.width/2?'l':'r'}
+function syncKeys(){keys.l=0;keys.r=0;for(const s of ptrs.values())keys[s]=1}
+let dragId=null, targetX=W/2;
+function worldX(e){const r=gameEl.getBoundingClientRect();return Math.max(14,Math.min(W-14,(e.clientX-r.left)/r.width*W))}
+gameEl.addEventListener('pointerdown',e=>{
+  if(state!=='play')return;
+  if(ctrl===0){dragId=e.pointerId;targetX=worldX(e);return}
+  ptrs.set(e.pointerId,side(e));syncKeys();
+});
+gameEl.addEventListener('pointermove',e=>{if(e.pointerId===dragId){targetX=worldX(e);return}if(ptrs.has(e.pointerId)){ptrs.set(e.pointerId,side(e));syncKeys()}});
+['pointerup','pointercancel','pointerleave'].forEach(t=>gameEl.addEventListener(t,e=>{if(e.pointerId===dragId)dragId=null;ptrs.delete(e.pointerId);syncKeys()}));
+const kmap={ArrowLeft:'l',a:'l',A:'l',ArrowRight:'r',d:'r',D:'r'};
+addEventListener('keydown',e=>{if(kmap[e.key]){keys[kmap[e.key]]=1;e.preventDefault()} if((e.key===' '||e.key==='Enter')&&(state==='menu'||state==='over')){e.preventDefault();start()}});
+addEventListener('keyup',e=>{if(kmap[e.key])keys[kmap[e.key]]=0});
+gameEl.addEventListener('contextmenu',e=>e.preventDefault());
+
+function show(id){['menu','over','shop'].forEach(s=>$(s).hidden=s!==id);$('hud').hidden=id!==null}
+function refreshWallet(){document.querySelectorAll('.walletTxt').forEach(e=>e.textContent=wallet);$('best0').textContent=best+' m'}
+
+/* ---------- anuncios (solo funcionan dentro de la app de Android) ---------- */
+const ADS={
+  testing:true,  // ⚠️ Cámbialo a false cuando pongas tus IDs reales de AdMob
+  rewarded:'ca-app-pub-3940256099942544/5224354917',     // ID de prueba de Google: pon aquí tu bloque "Bonificado"
+  interstitial:'ca-app-pub-3940256099942544/1033173712', // ID de prueba de Google: pon aquí tu bloque "Intersticial"
+  interstitialEvery:3,  // un anuncio de pantalla completa cada 3 partidas
+  minGapSec:120,        // y nunca más seguido que cada 2 minutos
+};
+const Cap=window.Capacitor;
+const AdMob=(Cap&&Cap.isNativePlatform&&Cap.isNativePlatform()&&Cap.Plugins&&Cap.Plugins.AdMob)||window.__fakeAdMob||null;
+let adsOk=false, rewardedReady=false, interReady=false, runsSinceInter=0, lastFullAd=Date.now(), adBusy=false;
+async function adsInit(){
+  if(!AdMob)return;
+  try{
+    await AdMob.initialize({initializeForTesting:ADS.testing});
+    let ci=await AdMob.requestConsentInfo();
+    if(!ci.canRequestAds&&ci.isConsentFormAvailable)ci=await AdMob.showConsentForm();
+    $('privacyBtn').hidden=ci.privacyOptionsRequirementStatus!=='REQUIRED';
+    adsOk=ci.canRequestAds!==false;
+  }catch(e){adsOk=true}
+  if(adsOk){loadRewarded();loadInter()}
+}
+async function loadRewarded(){
+  rewardedReady=false;updateAdButtons();
+  try{await AdMob.prepareRewardVideoAd({adId:ADS.rewarded,isTesting:ADS.testing});rewardedReady=true}
+  catch(e){setTimeout(loadRewarded,30000)}
+  updateAdButtons();
+}
+async function loadInter(){
+  interReady=false;
+  try{await AdMob.prepareInterstitial({adId:ADS.interstitial,isTesting:ADS.testing});interReady=true}
+  catch(e){setTimeout(loadInter,30000)}
+}
+// Resuelve true solo si el jugador vio el anuncio completo
+function showRewarded(){
+  return new Promise(res=>{
+    if(!AdMob||!rewardedReady)return res(false);
+    rewardedReady=false;adBusy=true;
+    let earned=false, done=false, hs=[];
+    const finish=()=>{if(done)return;done=true;adBusy=false;hs.forEach(h=>h&&h.remove&&h.remove());lastFullAd=Date.now();loadRewarded();res(earned)};
+    Promise.all([
+      AdMob.addListener('onRewardedVideoAdReward',()=>{earned=true}),
+      AdMob.addListener('onRewardedVideoAdDismissed',()=>setTimeout(finish,150)),
+      AdMob.addListener('onRewardedVideoAdFailedToShow',finish),
+    ]).then(h=>{hs=h;return AdMob.showRewardVideoAd()}).then(()=>{earned=true}).catch(finish);
+  });
+}
+function maybeInterstitial(){
+  return new Promise(res=>{
+    if(!AdMob||!interReady)return res();
+    runsSinceInter++;
+    if(runsSinceInter<ADS.interstitialEvery||Date.now()-lastFullAd<ADS.minGapSec*1000)return res();
+    runsSinceInter=0;interReady=false;adBusy=true;
+    let done=false, hs=[];
+    const finish=()=>{if(done)return;done=true;adBusy=false;hs.forEach(h=>h&&h.remove&&h.remove());lastFullAd=Date.now();loadInter();res()};
+    Promise.all([
+      AdMob.addListener('interstitialAdDismissed',finish),
+      AdMob.addListener('interstitialAdFailedToShow',finish),
+    ]).then(h=>{hs=h;return AdMob.showInterstitial()}).catch(finish);
+  });
+}
+let revived=false, doubled=false, lastEarned=0, invuln=0;
+function updateAdButtons(){
+  const on=!!AdMob&&adsOk&&state==='over';
+  $('adRow').hidden=!on||(revived&&doubled)||(doubled&&lastEarned===0);
+  $('adRevive').hidden=revived||doubled;
+  $('adDouble').hidden=doubled||lastEarned===0;
+  $('adRevive').disabled=$('adDouble').disabled=!rewardedReady||adBusy;
+}
+$('adRevive').addEventListener('click',async()=>{
+  if(adBusy)return;$('adMsg').hidden=true;
+  const ok=await showRewarded();
+  if(!ok){$('adMsg').hidden=false;updateAdButtons();return}
+  // devuelve las estrellas de esta partida: se vuelven a sumar al terminar
+  wallet-=lastEarned;save('borrego_wallet',wallet);lastEarned=0;
+  revived=true;state='play';show(null);$('hud').hidden=false;
+  sheep.dead=false;sheep.x=W/2;sheep.vx=0;sheep.y=camY+H*.85;sheep.vy=-BOOST*1.1;sheep.sq=.6;invuln=2.5;
+  foes=foes.filter(f=>f.kind!=='meteor'&&Math.abs(f.y-(camY+H*.5))>H*.6);
+  puff(sheep.x,sheep.y,16,'#ffd23f');sfx.star();startMusic();
+});
+$('adDouble').addEventListener('click',async()=>{
+  if(adBusy)return;$('adMsg').hidden=true;
+  const ok=await showRewarded();
+  if(!ok){$('adMsg').hidden=false;updateAdButtons();return}
+  wallet+=lastEarned;save('borrego_wallet',wallet);
+  doubled=true;$('fe').textContent=lastEarned*2;refreshWallet();sfx.buy();updateAdButtons();
+});
+$('privacyBtn').addEventListener('click',()=>{try{AdMob&&AdMob.showPrivacyOptionsForm()}catch(e){}});
+
+function start(){
+  reset(); state='play'; show(null); $('hud').hidden=false;
+  $('zoneName').textContent=t('zones')[0];
+  sfx.baa(); startMusic();
+}
+$('play').addEventListener('click',start);
+$('again').addEventListener('click',async()=>{if(adBusy)return;await maybeInterstitial();start()});
+
+let shopFrom='menu';
+function openShop(from){shopFrom=from;state=from==='menu'?'menu':'over';buildShop();show('shop')}
+$('shopBtn1').addEventListener('click',()=>openShop('menu'));
+$('shopBtn2').addEventListener('click',()=>openShop('over'));
+$('shopBack').addEventListener('click',()=>{show(shopFrom);refreshWallet()});
+
+function end(){
+  state='over'; stopMusic();
+  const m=Math.floor(maxH/PX_PER_M), pts=m+bonus;
+  const earned=starsN+Math.floor(m/100);
+  wallet+=earned; save('borrego_wallet',wallet); lastEarned=earned;
+  const rec=m>best; if(rec){best=m;save('borrego_best',best)}
+  $('fh').innerHTML=m+'<small> m</small>';
+  $('fz').textContent=t('reached')+t('zones')[zoneAt(m)];
+  $('fs').textContent=starsN; $('fp').textContent=pts; $('fb').textContent=best+' m';
+  $('fe').textContent=earned;
+  $('newRec').hidden=!rec;
+  $('overT').textContent=rec?t('wow'):(sheep.dead?t('ouch'):t('fall'));
+  refreshWallet(); show('over'); $('adMsg').hidden=true; updateAdButtons();
+  ptrs.clear();syncKeys();
+  try{navigator.vibrate&&navigator.vibrate(120)}catch(e){}
+}
+
+function showBanner(i){
+  const b=$('banner');$('banZ').textContent=t('zone')+' '+(i+1);$('banN').textContent=t('zones')[i];
+  b.hidden=true;void b.offsetWidth;b.hidden=false;
+  clearTimeout(showBanner.t);showBanner.t=setTimeout(()=>b.hidden=true,2400);
+}
+
+/* ---------- tienda ---------- */
+function buildShop(){
+  const grid=$('grid');grid.innerHTML='';
+  for(const sk of SKINS){
+    const it=document.createElement('div');it.className='item'+(sk.id===skinId?' on':'');
+    const c=document.createElement('canvas');c.width=192;c.height=160;
+    const g=c.getContext('2d');g.scale(2,2);
+    drawSheep(g,{x:40,y:68,sq:1,face:1,vy:0,dead:false,blink:false},sk,1.55);
+    const nm=document.createElement('div');nm.textContent=t('skinN')[SKINS.indexOf(sk)];
+    const bt=document.createElement('button');
+    const have=owned.includes(sk.id);
+    if(sk.id===skinId){bt.textContent=t('worn');bt.className='using'}
+    else if(have){bt.textContent=t('use')}
+    else{bt.textContent='★ '+sk.price;bt.className='buy';if(wallet<sk.price){bt.disabled=true;bt.setAttribute('aria-label',t('missing')(sk.price-wallet))}}
+    bt.addEventListener('click',()=>{
+      if(!owned.includes(sk.id)){ if(wallet<sk.price)return; wallet-=sk.price; owned.push(sk.id); save('borrego_wallet',wallet); save('borrego_owned',owned); sfx.buy() }
+      skinId=sk.id; save('borrego_skin',skinId); refreshWallet(); buildShop();
+    });
+    it.append(c,nm,bt);grid.append(it);
+  }
+  refreshWallet();
+}
+
+/* ---------- actualización ---------- */
+function update(dt){
+  time+=dt;
+  if(state!=='play'){ // borrego del menú rebotando
+    if(!sheep)reset();
+    sheep.vy+=G*dt; sheep.y+=sheep.vy*dt;
+    if(sheep.y>=0){sheep.y=0;sheep.vy=-JUMP*.75;sheep.sq=.7}
+    sheep.sq+=(1-sheep.sq)*Math.min(1,dt*10);
+    camY=-H*0.72;
+    return;
+  }
+  const dir=keys.r-keys.l;
+  if(ctrl===0&&dragId!==null&&!dir){
+    // deslizar: el borrego va hacia donde está el dedo
+    const dv=DRAG[sens], want=Math.max(-dv.max,Math.min(dv.max,(targetX-sheep.x)*dv.k));
+    sheep.vx+=(want-sheep.vx)*Math.min(1,dt*12);
+    if(Math.abs(sheep.vx)>25)sheep.face=Math.sign(sheep.vx);
+  }else{
+    const sv=SENS[sens];
+    sheep.vx+=(dir*sv.speed-sheep.vx)*Math.min(1,dt*(dir?sv.acc:sv.acc*1.4));
+    if(dir)sheep.face=dir;
+  }
+  sheep.x+=sheep.vx*dt;
+  if(sheep.x<-22)sheep.x+=W+44; else if(sheep.x>W+22)sheep.x-=W+44;
+  const prevY=sheep.y;
+  sheep.vy+=G*dt; sheep.y+=sheep.vy*dt;
+  sheep.sq+=(1-sheep.sq)*Math.min(1,dt*10);
+  sheep.blink=(time%3.2)<.12;
+  invuln=Math.max(0,invuln-dt);
+
+  for(const p of plats){
+    if(p.type==='m'){p.x+=p.dir*p.sp*dt; if(p.x<0){p.x=0;p.dir=1} if(p.x+p.w>W){p.x=W-p.w;p.dir=-1}}
+    if(p.broken){p.vy=(p.vy||0)+G*dt;p.y+=p.vy*dt;p.a=Math.max(0,(p.a??1)-dt*2.5)}
+  }
+
+  if(!sheep.dead&&sheep.vy>0){
+    for(const p of plats){
+      if(p.broken)continue;
+      if(prevY<=p.y+2&&sheep.y>=p.y&&sheep.x+13>p.x&&sheep.x-13<p.x+p.w){
+        if(p.type==='f'){p.broken=true;sfx.crack();puff(sheep.x,p.y,8,'#9aa3b8');continue}
+        sheep.y=p.y;sheep.vy=-JUMP;sheep.sq=.68;sfx.jump();puff(sheep.x,p.y,5,'#ffffff');
+        break;
+      }
+    }
+  }
+
+  const cx=sheep.x, cy=sheep.y-20, mNow=maxH/PX_PER_M;
+  for(const s of stars){
+    s.ph+=dt*3;
+    if(!s.got&&!sheep.dead&&Math.hypot(s.x-cx,s.y-cy)<30){
+      s.got=true;starsN++;bonus+=50;sheep.vy=-BOOST;sheep.sq=.6;sfx.star();puff(s.x,s.y,14,'#ffd23f');
+    }
+  }
+
+  // meteoritos en el espacio
+  if(zone>=4){
+    meteorT-=dt;
+    if(meteorT<=0){
+      meteorT=rnd(1.6,3.6)-Math.min(1,(mNow-3200)/4000);
+      foes.push({kind:'meteor',x:rnd(30,W-30),y:camY-60,vx:rnd(-50,50),vy:0,warn:.9,dead:false,ph:0});
+    }
+  }
+
+  for(const b of foes){
+    b.ph+=dt*14;
+    if(b.dead){b.vy+=G*dt;b.y+=b.vy*dt;continue}
+    if(b.kind==='meteor'){
+      if(b.warn>0){b.warn-=dt;b.y=camY-60;continue}
+      b.vy=Math.min(520,b.vy+900*dt);b.x+=b.vx*dt;b.y+=b.vy*dt;
+      if(Math.random()<.6)parts.push({x:b.x+rnd(-6,6),y:b.y-10,vx:rnd(-20,20),vy:-40,r:rnd(3,6),life:.7,col:Math.random()<.5?'#ffb13b':'#ff6a3d'});
+      if(!sheep.dead&&invuln<=0&&Math.hypot(b.x-cx,b.y-cy)<26){sheep.dead=true;sheep.vy=Math.max(sheep.vy,-100);shake=.4;sfx.hit();puff(cx,cy,14,'#ff8a3d')}
+      continue;
+    }
+    b.x+=b.vx*dt; if(b.x<-30)b.x=W+30; if(b.x>W+30)b.x=-30;
+    if(b.kind==='bat')b.y=b.y0+Math.sin(b.ph*.22)*34;
+    if(!sheep.dead&&Math.abs(b.x-cx)<26&&Math.abs(b.y-cy)<24){
+      if(sheep.vy>0&&cy<b.y-4){b.dead=true;b.vy=-200;bonus+=100;sheep.vy=-JUMP*1.1;sheep.sq=.65;sfx.stomp();puff(b.x,b.y,10,b.kind==='bat'?'#5a3f7a':'#5b607f')}
+      else if(invuln<=0){sheep.dead=true;sheep.vy=Math.max(sheep.vy,-150);sheep.vx=b.vx*.5;shake=.35;sfx.hit()}
+    }
+  }
+  for(const q of parts){q.x+=q.vx*dt;q.y+=q.vy*dt;q.vy+=200*dt;q.life-=dt*1.8}
+  parts=parts.filter(q=>q.life>0);
+
+  if(!sheep.dead)maxH=Math.max(maxH,-sheep.y);
+  const z=zoneAt(maxH/PX_PER_M);
+  if(z>zone){zone=z;showBanner(z);sfx.zone();$('zoneName').textContent=t('zones')[z];$('hud').classList.toggle('dark',z>=3)}
+  const target=sheep.y-H*0.42;
+  if(target<camY)camY=target;
+  shake=Math.max(0,shake-dt);
+  gen();
+  const cut=camY+H+120;
+  plats=plats.filter(p=>p.y<cut&&(p.a??1)>0);
+  stars=stars.filter(s=>s.y<cut);
+  foes=foes.filter(b=>b.y<cut);
+
+  $('h').textContent=Math.floor(maxH/PX_PER_M)+' m';
+  $('s').textContent=starsN;
+  if(sheep.y>camY+H+60)end();
+}
+
+/* ---------- dibujo ---------- */
+const skyStops=[ // [metros, arriba, abajo]
+  [0,   [95,180,240],[196,232,255]],
+  [600, [70,140,225],[160,210,255]],
+  [1300,[120,95,190],[250,170,150]],
+  [2200,[35,35,90], [90,70,140]],
+  [3400,[8,8,30],   [26,22,64]],
+];
+function lerp(a,b,t){return a+(b-a)*t}
+function skyAt(m){
+  for(let i=0;i<skyStops.length-1;i++){
+    const [m0,t0,b0]=skyStops[i],[m1,t1,b1]=skyStops[i+1];
+    if(m<=m1){const t=Math.max(0,(m-m0)/(m1-m0));return [t0.map((v,k)=>lerp(v,t1[k],t)),b0.map((v,k)=>lerp(v,b1[k],t))]}
+  }
+  const l=skyStops[skyStops.length-1];return [l[1],l[2]];
+}
+const rgb=c=>`rgb(${c.map(Math.round).join(',')})`;
+const bgStars=Array.from({length:80},()=>({x:Math.random()*W,y:Math.random(),r:Math.random()*1.4+.4,p:Math.random()*6}));
+const farClouds=Array.from({length:7},(_,i)=>({x:Math.random()*W,y:i*260+Math.random()*120,s:rnd(.6,1.2)}));
+
+function cloudShape(x,y,w,h){
+  ctx.beginPath();
+  const n=Math.max(3,Math.round(w/22));
+  for(let i=0;i<n;i++){
+    const cx=x+w*(i+.5)/n, r=h*(i===0||i===n-1?.55:.8);
+    ctx.moveTo(cx+r,y);ctx.arc(cx,y-(i%2?h*.15:0),r,0,Math.PI*2);
+  }
+  ctx.rect(x+h*.3,y-h*.1,w-h*.6,h*.55);
+}
+function drawPlat(p){
+  ctx.save();ctx.globalAlpha=p.a??1;
+  if(p.type==='g'){
+    ctx.fillStyle='#7cc56b';ctx.beginPath();ctx.moveTo(p.x,p.y);
+    for(let x=p.x;x<=p.x+p.w;x+=20)ctx.lineTo(x,p.y-4*Math.sin(x*.08));
+    ctx.lineTo(p.x+p.w,p.y+H);ctx.lineTo(p.x,p.y+H);ctx.fill();
+    ctx.fillStyle='#5aa653';ctx.fillRect(p.x,p.y+14,p.w,H);
+    ctx.fillStyle='#f6e27a';for(let i=0;i<9;i++){const fx=20+i*40;ctx.beginPath();ctx.arc(fx,p.y+8+(i%3)*5,2.5,0,7);ctx.fill()}
+    ctx.restore();return;
+  }
+  const bob=p.type==='f'?0:Math.sin(time*2+p.ph)*1.5;
+  const y=p.y+8+bob, h=12;
+  ctx.fillStyle='rgba(36,48,79,.18)';cloudShape(p.x,y+3,p.w,h);ctx.fill();
+  if(p.type==='f'){
+    ctx.fillStyle='#a8afc2';cloudShape(p.x,y,p.w,h);ctx.fill();
+    ctx.strokeStyle='#6d7590';ctx.lineWidth=2;ctx.beginPath();
+    ctx.moveTo(p.x+p.w*.45,y-10);ctx.lineTo(p.x+p.w*.52,y-2);ctx.lineTo(p.x+p.w*.46,y+4);ctx.stroke();
+  }else{
+    ctx.fillStyle=p.type==='m'?'#fff1f4':'#ffffff';cloudShape(p.x,y,p.w,h);ctx.fill();
+    ctx.fillStyle=p.type==='m'?'rgba(255,140,170,.25)':'rgba(120,160,210,.22)';
+    ctx.fillRect(p.x+h*.3,y+2,p.w-h*.6,h*.4);
+  }
+  ctx.restore();
+}
+function starPath(g,x,y,R,r,rot){
+  g.beginPath();
+  for(let i=0;i<10;i++){const a=rot+i*Math.PI/5-Math.PI/2,rr=i%2?r:R;g.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr)}
+  g.closePath();
+}
+function drawStar(s){
+  if(s.got)return;
+  const y=s.y+Math.sin(s.ph)*4;
+  ctx.fillStyle='rgba(255,210,63,.25)';ctx.beginPath();ctx.arc(s.x,y,20+Math.sin(s.ph*2)*3,0,7);ctx.fill();
+  starPath(ctx,s.x,y,14,6.5,Math.sin(s.ph*.5)*.3);
+  ctx.fillStyle='#ffd23f';ctx.fill();ctx.lineWidth=2.5;ctx.strokeStyle='#c98a00';ctx.stroke();
+}
+function drawBird(b){
+  ctx.save();ctx.translate(b.x,b.y);ctx.scale(b.vx<0?-1:1,b.dead?-1:1);
+  ctx.fillStyle='#4a4f73';ctx.beginPath();ctx.ellipse(0,0,15,10,0,0,7);ctx.fill();
+  ctx.beginPath();ctx.arc(12,-5,7,0,7);ctx.fill();
+  ctx.fillStyle='#ff9a3c';ctx.beginPath();ctx.moveTo(18,-6);ctx.lineTo(26,-3);ctx.lineTo(18,-1);ctx.fill();
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(14,-7,2.4,0,7);ctx.fill();
+  ctx.fillStyle='#111';ctx.beginPath();ctx.arc(14.6,-7,1.2,0,7);ctx.fill();
+  const f=Math.sin(b.ph)*10;
+  ctx.fillStyle='#6a70a0';ctx.beginPath();ctx.moveTo(-6,-2);ctx.lineTo(4,-2);ctx.lineTo(-2,-14-f);ctx.fill();
+  ctx.restore();
+}
+function drawBat(b){
+  ctx.save();ctx.translate(b.x,b.y);ctx.scale(b.vx<0?-1:1,b.dead?-1:1);
+  const f=Math.sin(b.ph*1.3);
+  ctx.fillStyle='#3d2a57';
+  for(const s of[-1,1]){
+    ctx.beginPath();ctx.moveTo(0,-2);ctx.lineTo(s*22,-10-f*8);ctx.lineTo(s*17,-2-f*3);ctx.lineTo(s*20,4-f*2);ctx.lineTo(s*9,2);ctx.closePath();ctx.fill();
+  }
+  ctx.fillStyle='#5a3f7a';ctx.beginPath();ctx.ellipse(0,0,9,10,0,0,7);ctx.fill();
+  ctx.beginPath();ctx.moveTo(-6,-7);ctx.lineTo(-4,-15);ctx.lineTo(-1,-8);ctx.moveTo(6,-7);ctx.lineTo(4,-15);ctx.lineTo(1,-8);ctx.fill();
+  ctx.fillStyle='#ffdd55';ctx.beginPath();ctx.arc(-3,-2,2,0,7);ctx.arc(3.5,-2,2,0,7);ctx.fill();
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(-2,4);ctx.lineTo(-1,7);ctx.lineTo(0,4);ctx.moveTo(1,4);ctx.lineTo(2,7);ctx.lineTo(3,4);ctx.fill();
+  ctx.restore();
+}
+function drawMeteor(b){
+  if(b.warn>0){ // aviso en la parte de arriba
+    const y=camY+44, a=.5+.5*Math.sin(time*20);
+    ctx.save();ctx.globalAlpha=a;ctx.fillStyle='#ff5a3d';
+    ctx.beginPath();ctx.moveTo(b.x,y-14);ctx.lineTo(b.x+13,y+10);ctx.lineTo(b.x-13,y+10);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#fff';ctx.font='900 16px sans-serif';ctx.textAlign='center';ctx.fillText('!',b.x,y+7);ctx.restore();
+    return;
+  }
+  ctx.save();ctx.translate(b.x,b.y);
+  const gl=ctx.createRadialGradient(0,0,4,0,0,28);gl.addColorStop(0,'rgba(255,170,60,.6)');gl.addColorStop(1,'rgba(255,90,40,0)');
+  ctx.fillStyle=gl;ctx.beginPath();ctx.arc(0,0,28,0,7);ctx.fill();
+  ctx.fillStyle='#7a5a4a';ctx.beginPath();
+  for(let i=0;i<8;i++){const a=i/8*Math.PI*2,r=13+(i%3)*2;ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r)}
+  ctx.closePath();ctx.fill();
+  ctx.fillStyle='#5a3f35';ctx.beginPath();ctx.arc(-4,-3,3.5,0,7);ctx.arc(5,4,2.5,0,7);ctx.fill();
+  ctx.restore();
+}
+const WOOL=[[-11,-17,10],[0,-24,11],[11,-17,10],[-6,-10,9],[7,-10,9],[0,-16,12],[-9,-26,7],[9,-27,7]];
+function drawSheep(g,sh,sk,sc=1){
+  sk=sk||skinOf(skinId);
+  g.save();g.translate(sh.x,sh.y);
+  const sx=1+(1-sh.sq)*.6;g.scale(sh.face*sx*sc,sh.sq*sc);
+  if(sh.dead)g.rotate(Math.sin(time*20)*.3);
+  const tuck=sh.vy<-200;
+  g.fillStyle=sk.face;
+  for(const lx of[-9,-3,4,10]){g.fillRect(lx-2,tuck?-10:-8,4,tuck?6:8)}
+  g.fillStyle=sk.line;
+  for(const [x,y,r] of WOOL){g.beginPath();g.arc(x,y,r+2.2,0,7);g.fill()}
+  WOOL.forEach(([x,y,r],i)=>{
+    g.fillStyle=sk.wool==='rainbow'?`hsl(${(i*45+time*140)%360},85%,82%)`:sk.wool;
+    g.beginPath();g.arc(x,y,r,0,7);g.fill();
+  });
+  g.fillStyle='rgba(58,68,102,.12)';g.beginPath();g.arc(2,-11,9,0,7);g.fill();
+  // cabeza
+  g.fillStyle=sk.face;
+  g.beginPath();g.ellipse(16,-24,7.5,9,.25,0,7);g.fill();
+  g.beginPath();g.ellipse(10,-29,5,2.6,-.6,0,7);g.fill();
+  g.beginPath();g.ellipse(21,-31,5,2.6,.7,0,7);g.fill();
+  g.fillStyle=sk.wool==='rainbow'?'#fffdf7':sk.wool;g.beginPath();g.arc(14,-33,4.5,0,7);g.arc(18,-34,3.5,0,7);g.fill();
+  if(sh.dead){
+    g.strokeStyle='#fff';g.lineWidth=1.6;g.beginPath();
+    g.moveTo(16,-27);g.lineTo(20,-23);g.moveTo(20,-27);g.lineTo(16,-23);g.stroke();
+  }else if(!sh.blink){
+    g.fillStyle='#fff';g.beginPath();g.arc(18.5,-25.5,2.8,0,7);g.fill();
+    g.fillStyle='#111';g.beginPath();g.arc(19.4,-25.5,1.5,0,7);g.fill();
+  }else{g.strokeStyle='#fff';g.lineWidth=1.5;g.beginPath();g.moveTo(16.5,-25.5);g.lineTo(21,-25.5);g.stroke()}
+  g.fillStyle='#ff9fb0';g.beginPath();g.arc(20,-19.5,1.8,0,7);g.fill();
+  // accesorios
+  if(sk.hat==='cowboy'){
+    g.fillStyle='#8a5a2b';g.beginPath();g.ellipse(16,-36,12,3,-.1,0,7);g.fill();
+    g.fillStyle='#a06a34';g.beginPath();g.moveTo(9,-36);g.lineTo(10,-45);g.quadraticCurveTo(16,-42,22,-45);g.lineTo(23,-36);g.closePath();g.fill();
+    g.fillStyle='#5a3a1a';g.fillRect(9.5,-39,13,2.5);
+  }else if(sk.hat==='crown'){
+    g.fillStyle='#ffc93c';g.strokeStyle='#b07d00';g.lineWidth=1.2;g.beginPath();
+    g.moveTo(8,-36);g.lineTo(8,-45);g.lineTo(12,-40);g.lineTo(16,-47);g.lineTo(20,-40);g.lineTo(24,-45);g.lineTo(24,-36);g.closePath();g.fill();g.stroke();
+    g.fillStyle='#ff5a7a';g.beginPath();g.arc(16,-39,1.8,0,7);g.fill();
+  }else if(sk.hat==='helmet'){
+    g.fillStyle='rgba(170,215,255,.35)';g.strokeStyle='#c9d6ea';g.lineWidth=2.5;
+    g.beginPath();g.arc(16,-27,14,0,7);g.fill();g.stroke();
+    g.strokeStyle='rgba(255,255,255,.8)';g.lineWidth=2;g.beginPath();g.arc(16,-27,10,-2.4,-1.6);g.stroke();
+    g.fillStyle='#c9d6ea';g.fillRect(12,-43,2,4);g.fillStyle='#ff5a3d';g.beginPath();g.arc(13,-44,2,0,7);g.fill();
+  }else if(sk.hat==='sparkle'){
+    g.fillStyle='#fff6c2';
+    for(let i=0;i<3;i++){const a=time*2+i*2.1;starPath(g,Math.cos(a)*20,-20+Math.sin(a)*16,4,1.6,0);g.fill()}
+  }
+  g.restore();
+}
+
+function draw(){
+  ctx.setTransform(DPR*S,0,0,DPR*S,0,0);
+  const m=Math.max(0,-camY/PX_PER_M-H*.5/PX_PER_M);
+  const [top,bot]=skyAt(m);
+  const gr=ctx.createLinearGradient(0,0,0,H);gr.addColorStop(0,rgb(top));gr.addColorStop(1,rgb(bot));
+  ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);
+
+  const night=Math.min(1,Math.max(0,(m-1500)/1100));
+  if(night>0){
+    for(const s of bgStars){
+      const y=((s.y*H*1.5-camY*.05)%(H*1.5)+H*1.5)%(H*1.5);
+      ctx.globalAlpha=night*(.5+.5*Math.sin(time*2+s.p));ctx.fillStyle='#fff';
+      ctx.fillRect(s.x,y,s.r,s.r);
+    }
+    ctx.globalAlpha=1;
+  }
+  // luna en la noche, planeta en el espacio
+  if(night>.3){
+    ctx.save();ctx.globalAlpha=Math.min(1,(night-.3)*2);
+    const space=Math.min(1,Math.max(0,(m-3000)/500));
+    ctx.fillStyle='#fff4c8';ctx.beginPath();ctx.arc(W-70,120,28,0,7);ctx.fill();
+    ctx.fillStyle=rgb(top);ctx.beginPath();ctx.arc(W-58,112,24,0,7);ctx.fill();
+    if(space>0){
+      ctx.globalAlpha=space;
+      ctx.fillStyle='#e07a5f';ctx.beginPath();ctx.arc(70,H*.62,34,0,7);ctx.fill();
+      ctx.strokeStyle='#f2cc8f';ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(70,H*.62,56,12,-.3,0,7);ctx.stroke();
+    }
+    ctx.restore();
+  }
+  // nubes lejanas (paralaje)
+  ctx.globalAlpha=.35*(1-night*.8);ctx.fillStyle='#ffffff';
+  for(const c of farClouds){
+    const span=7*260, y=((c.y-camY*.25)%span+span)%span-120;
+    cloudShape(c.x-60*c.s,y,120*c.s,22*c.s);ctx.fill();
+  }
+  ctx.globalAlpha=1;
+
+  const sx=shake>0?rnd(-4,4):0;
+  ctx.save();ctx.translate(sx,-camY);
+  for(const p of plats)drawPlat(p);
+  for(const s of stars)drawStar(s);
+  for(const q of parts){ctx.globalAlpha=Math.max(0,q.life);ctx.fillStyle=q.col;ctx.beginPath();ctx.arc(q.x,q.y,q.r,0,7);ctx.fill()}
+  ctx.globalAlpha=1;
+  for(const b of foes){if(b.kind==='bird')drawBird(b);else if(b.kind==='bat')drawBat(b);else drawMeteor(b)}
+  if(sheep){
+    if(!(invuln>0&&((time*12)|0)%2))drawSheep(ctx,sheep);
+    if(sheep.x<24)drawSheep(ctx,{...sheep,x:sheep.x+W+44});
+    else if(sheep.x>W-24)drawSheep(ctx,{...sheep,x:sheep.x-W-44});
+  }
+  ctx.restore();
+}
+
+refreshWallet();
+function loop(now){
+  const dt=Math.min(1/30,(now-last)/1000);last=now;
+  update(dt);draw();
+  requestAnimationFrame(loop);
+}
+reset();
+requestAnimationFrame(loop);
+
+// ayuda para pruebas desde la consola
+window.__borrego={jump(m){maxH=m*PX_PER_M;sheep.y=-m*PX_PER_M;camY=sheep.y-H*.42;genY=Math.min(genY,sheep.y+200);plats=plats.filter(p=>p.y<sheep.y+H);plats.push({x:0,y:sheep.y+40,w:W,type:'n',ph:0});gen()},get state(){return state},set wallet(v){wallet=v;refreshWallet()}};
+})();
+</script>
+</body></html>

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Wooly</string>
+    <string name="title_activity_main">Wooly</string>
+    <string name="package_name">com.borregoalcielo.juego</string>
+    <string name="custom_url_scheme">com.borregoalcielo.juego</string>
+    <!-- Cambia esto por el ID de tu app de AdMob (empieza con ca-app-pub- y tiene una ~) -->
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+</resources>
