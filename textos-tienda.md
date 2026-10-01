@@ -22,7 +22,7 @@ Toca la izquierda o la derecha de la pantalla para moverlo y rebota de nube en n
 • Nubes que se mueven y nubes grises que se rompen
 • Pájaros y murciélagos: cáeles encima para rebotar
 • Meteoritos en el espacio: ¡esquívalos!
-• Ocho disfraces: vaquero, rey, astronauta, arcoíris y más
+• 17 disfraces: médico, araña, pirata, ninja, unicornio, astronauta y más
 • Música que cambia en cada zona
 • Se juega con una mano y sin internet
 
@@ -46,7 +46,7 @@ Tap the left or right side of the screen to steer, and bounce from cloud to clou
 • Moving clouds and gray clouds that break
 • Birds and bats: land on them to bounce
 • Meteors in space: dodge them!
-• Eight costumes: cowboy, king, astronaut, rainbow and more
+• 17 costumes: doctor, spider, pirate, ninja, unicorn, astronaut and more
 • Music that changes in every zone
 • One-handed play, no internet needed
 

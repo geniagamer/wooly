@@ -184,21 +184,21 @@ let sens=Math.min(2,Math.max(0,+load('borrego_sens',1)||0));
 /* ---------- idiomas ---------- */
 const LANGS={
   es:{name:'Español',tag:'el borrego que salta al cielo',intro:'Rebota de nube en nube y llega lo más alto que puedas.',tipL:'Toca a la izquierda',tipR:'Toca a la derecha',tipS:'Estrella = súper salto',warn:'Cinco zonas, cada una con sus peligros. A los pájaros y murciélagos puedes caerles encima. A los meteoritos no.',play:'¡A saltar!',skins:'Disfraces',best:'Récord',yourStars:'Tus estrellas',fall:'¡Se cayó!',ouch:'¡Auch!',wow:'¡Qué altura!',reached:'Llegaste a: ',newRec:'Nuevo récord',starsLbl:'Estrellas',points:'Puntos',earned:'Ganaste',have:'tienes',again:'Otra vez',shopHint:'Gana estrellas atrapándolas en el cielo, y una más por cada 100 m que subas.',done:'Listo',revive:'Revivir',double:'×2 estrellas',watch:'Ver anuncio',privacy:'Privacidad',adFail:'El anuncio no cargó. Intenta en un momento.',sens:'Sensibilidad',sLow:'Baja',sNormal:'Normal',sHigh:'Alta',ctrl:'Control',mDrag:'Deslizar',mTap:'Tocar lados',tipDrag:'Desliza el dedo a los lados',zone:'Zona',worn:'Puesto',use:'Usar',missing:n=>`Te faltan ${n} estrellas`,mute:'Silenciar',unmute:'Activar sonido',canvas:'Juego: borrego que salta hacia el cielo',lang:'Idioma',
-    zones:['Pradera','Cielo alto','Atardecer','Noche','Espacio'],skinN:['Clásico','Oveja negra','Algodón','Vaquero','Rey','Arcoíris','Astronauta','Dorado']},
+    zones:['Pradera','Cielo alto','Atardecer','Noche','Espacio'],skinN:['Clásico','Oveja negra','Algodón','Vaquero','Rey','Arcoíris','Astronauta','Dorado','Médico','Chef','Pirata','Ninja','Abeja','Araña','Mago','Vampiro','Unicornio']},
   en:{name:'English',tag:'the sheep who jumps to the sky',intro:'Bounce from cloud to cloud and climb as high as you can.',tipL:'Tap left',tipR:'Tap right',tipS:'Star = super jump',warn:'Five zones, each with its own dangers. You can land on birds and bats. Not on meteors.',play:'Jump!',skins:'Costumes',best:'Best',yourStars:'Your stars',fall:'It fell!',ouch:'Ouch!',wow:'What a height!',reached:'You reached: ',newRec:'New record',starsLbl:'Stars',points:'Points',earned:'You earned',have:'you have',again:'Play again',shopHint:'Earn stars by catching them in the sky, plus one for every 100 m you climb.',done:'Done',revive:'Revive',double:'×2 stars',watch:'Watch an ad',privacy:'Privacy',adFail:'The ad didn’t load. Try again in a moment.',sens:'Sensitivity',sLow:'Low',sNormal:'Normal',sHigh:'High',ctrl:'Controls',mDrag:'Slide',mTap:'Tap sides',tipDrag:'Slide your finger left and right',zone:'Zone',worn:'Wearing',use:'Use',missing:n=>`You need ${n} more stars`,mute:'Mute',unmute:'Turn sound on',canvas:'Game: a sheep jumping up to the sky',lang:'Language',
-    zones:['Meadow','High Sky','Sunset','Night','Space'],skinN:['Classic','Black Sheep','Cotton Candy','Cowboy','King','Rainbow','Astronaut','Golden']},
+    zones:['Meadow','High Sky','Sunset','Night','Space'],skinN:['Classic','Black Sheep','Cotton Candy','Cowboy','King','Rainbow','Astronaut','Golden','Doctor','Chef','Pirate','Ninja','Bee','Spider','Wizard','Vampire','Unicorn']},
   pt:{name:'Português',tag:'a ovelhinha que pula até o céu',intro:'Pule de nuvem em nuvem e suba o mais alto que puder.',tipL:'Toque à esquerda',tipR:'Toque à direita',tipS:'Estrela = superpulo',warn:'Cinco zonas, cada uma com seus perigos. Você pode cair em cima dos pássaros e morcegos. Dos meteoros, não.',play:'Pular!',skins:'Fantasias',best:'Recorde',yourStars:'Suas estrelas',fall:'Caiu!',ouch:'Ai!',wow:'Que altura!',reached:'Você chegou a: ',newRec:'Novo recorde',starsLbl:'Estrelas',points:'Pontos',earned:'Ganhou',have:'você tem',again:'De novo',shopHint:'Ganhe estrelas pegando-as no céu, e mais uma a cada 100 m que subir.',done:'Pronto',revive:'Reviver',double:'×2 estrelas',watch:'Ver anúncio',privacy:'Privacidade',adFail:'O anúncio não carregou. Tente de novo daqui a pouco.',sens:'Sensibilidade',sLow:'Baixa',sNormal:'Normal',sHigh:'Alta',ctrl:'Controle',mDrag:'Deslizar',mTap:'Tocar lados',tipDrag:'Deslize o dedo para os lados',zone:'Zona',worn:'Usando',use:'Usar',missing:n=>`Faltam ${n} estrelas`,mute:'Silenciar',unmute:'Ativar som',canvas:'Jogo: ovelhinha pulando até o céu',lang:'Idioma',
-    zones:['Campo','Céu alto','Pôr do sol','Noite','Espaço'],skinN:['Clássica','Ovelha negra','Algodão-doce','Caubói','Rei','Arco-íris','Astronauta','Dourada']},
+    zones:['Campo','Céu alto','Pôr do sol','Noite','Espaço'],skinN:['Clássica','Ovelha negra','Algodão-doce','Caubói','Rei','Arco-íris','Astronauta','Dourada','Médico','Chef','Pirata','Ninja','Abelha','Aranha','Mago','Vampiro','Unicórnio']},
   fr:{name:'Français',tag:'le mouton qui saute jusqu’au ciel',intro:'Rebondis de nuage en nuage et monte le plus haut possible.',tipL:'Touche à gauche',tipR:'Touche à droite',tipS:'Étoile = super saut',warn:'Cinq zones, chacune avec ses dangers. Tu peux sauter sur les oiseaux et les chauves-souris. Pas sur les météorites.',play:'On saute !',skins:'Costumes',best:'Record',yourStars:'Tes étoiles',fall:'Il est tombé !',ouch:'Aïe !',wow:'Quelle hauteur !',reached:'Tu as atteint : ',newRec:'Nouveau record',starsLbl:'Étoiles',points:'Points',earned:'Gagné',have:'tu as',again:'Rejouer',shopHint:'Gagne des étoiles en les attrapant dans le ciel, plus une tous les 100 m.',done:'OK',revive:'Revivre',double:'×2 étoiles',watch:'Voir une pub',privacy:'Confidentialité',adFail:'La pub n’a pas chargé. Réessaie dans un instant.',sens:'Sensibilité',sLow:'Basse',sNormal:'Normale',sHigh:'Haute',ctrl:'Contrôles',mDrag:'Glisser',mTap:'Toucher les côtés',tipDrag:'Fais glisser ton doigt à gauche et à droite',zone:'Zone',worn:'Porté',use:'Mettre',missing:n=>`Il te manque ${n} étoiles`,mute:'Couper le son',unmute:'Activer le son',canvas:'Jeu : un mouton qui saute vers le ciel',lang:'Langue',
-    zones:['Prairie','Haut du ciel','Coucher de soleil','Nuit','Espace'],skinN:['Classique','Mouton noir','Barbe à papa','Cowboy','Roi','Arc-en-ciel','Astronaute','Doré']},
+    zones:['Prairie','Haut du ciel','Coucher de soleil','Nuit','Espace'],skinN:['Classique','Mouton noir','Barbe à papa','Cowboy','Roi','Arc-en-ciel','Astronaute','Doré','Docteur','Chef','Pirate','Ninja','Abeille','Araignée','Magicien','Vampire','Licorne']},
   de:{name:'Deutsch',tag:'das Schaf, das in den Himmel springt',intro:'Hüpf von Wolke zu Wolke und komm so hoch wie möglich.',tipL:'Links tippen',tipR:'Rechts tippen',tipS:'Stern = Supersprung',warn:'Fünf Zonen mit eigenen Gefahren. Auf Vögel und Fledermäuse kannst du springen. Auf Meteore nicht.',play:'Los geht’s!',skins:'Kostüme',best:'Rekord',yourStars:'Deine Sterne',fall:'Abgestürzt!',ouch:'Autsch!',wow:'Was für eine Höhe!',reached:'Erreicht: ',newRec:'Neuer Rekord',starsLbl:'Sterne',points:'Punkte',earned:'Verdient',have:'du hast',again:'Nochmal',shopHint:'Fang Sterne am Himmel und bekomm einen extra für je 100 m Höhe.',done:'Fertig',revive:'Wiederbeleben',double:'×2 Sterne',watch:'Werbung ansehen',privacy:'Datenschutz',adFail:'Die Werbung hat nicht geladen. Versuch es gleich nochmal.',sens:'Empfindlichkeit',sLow:'Niedrig',sNormal:'Normal',sHigh:'Hoch',ctrl:'Steuerung',mDrag:'Wischen',mTap:'Seiten tippen',tipDrag:'Wisch mit dem Finger nach links und rechts',zone:'Zone',worn:'An',use:'Anziehen',missing:n=>`Dir fehlen ${n} Sterne`,mute:'Ton aus',unmute:'Ton an',canvas:'Spiel: ein Schaf springt in den Himmel',lang:'Sprache',
-    zones:['Wiese','Hoher Himmel','Abendrot','Nacht','Weltraum'],skinN:['Klassisch','Schwarzes Schaf','Zuckerwatte','Cowboy','König','Regenbogen','Astronaut','Golden']},
+    zones:['Wiese','Hoher Himmel','Abendrot','Nacht','Weltraum'],skinN:['Klassisch','Schwarzes Schaf','Zuckerwatte','Cowboy','König','Regenbogen','Astronaut','Golden','Arzt','Koch','Pirat','Ninja','Biene','Spinne','Zauberer','Vampir','Einhorn']},
   it:{name:'Italiano',tag:'la pecorella che salta fino al cielo',intro:'Rimbalza di nuvola in nuvola e sali più in alto che puoi.',tipL:'Tocca a sinistra',tipR:'Tocca a destra',tipS:'Stella = super salto',warn:'Cinque zone, ognuna con i suoi pericoli. Puoi saltare su uccelli e pipistrelli. Sui meteoriti no.',play:'Salta!',skins:'Costumi',best:'Record',yourStars:'Le tue stelle',fall:'È caduta!',ouch:'Ahi!',wow:'Che altezza!',reached:'Sei arrivato a: ',newRec:'Nuovo record',starsLbl:'Stelle',points:'Punti',earned:'Hai vinto',have:'ne hai',again:'Ancora',shopHint:'Guadagna stelle prendendole in cielo, più una ogni 100 m di salita.',done:'Fatto',revive:'Rinasci',double:'×2 stelle',watch:'Guarda la pubblicità',privacy:'Privacy',adFail:'La pubblicità non si è caricata. Riprova tra poco.',sens:'Sensibilità',sLow:'Bassa',sNormal:'Normale',sHigh:'Alta',ctrl:'Controlli',mDrag:'Scorri',mTap:'Tocca i lati',tipDrag:'Scorri il dito a destra e a sinistra',zone:'Zona',worn:'Indossato',use:'Usa',missing:n=>`Ti mancano ${n} stelle`,mute:'Disattiva audio',unmute:'Attiva audio',canvas:'Gioco: una pecorella che salta verso il cielo',lang:'Lingua',
-    zones:['Prato','Cielo alto','Tramonto','Notte','Spazio'],skinN:['Classica','Pecora nera','Zucchero filato','Cowboy','Re','Arcobaleno','Astronauta','Dorata']},
+    zones:['Prato','Cielo alto','Tramonto','Notte','Spazio'],skinN:['Classica','Pecora nera','Zucchero filato','Cowboy','Re','Arcobaleno','Astronauta','Dorata','Dottore','Chef','Pirata','Ninja','Ape','Ragno','Mago','Vampiro','Unicorno']},
   ja:{name:'日本語',tag:'空までジャンプするひつじ',intro:'雲から雲へはねて、できるだけ高くのぼろう。',tipL:'左をタップ',tipR:'右をタップ',tipS:'星 = スーパージャンプ',warn:'5つのゾーンにそれぞれ危険がいっぱい。鳥とコウモリは踏めるけど、隕石はダメ。',play:'ジャンプ！',skins:'きせかえ',best:'ベスト',yourStars:'星の数',fall:'落ちちゃった！',ouch:'いたっ！',wow:'すごい高さ！',reached:'到達：',newRec:'新記録',starsLbl:'星',points:'ポイント',earned:'獲得',have:'所持',again:'もう一回',shopHint:'空で星をつかまえよう。100mのぼるごとに1つもらえるよ。',done:'OK',revive:'復活',double:'星×2',watch:'広告を見る',privacy:'プライバシー',adFail:'広告を読み込めませんでした。少し待ってからもう一度どうぞ。',sens:'感度',sLow:'低',sNormal:'中',sHigh:'高',ctrl:'操作',mDrag:'スライド',mTap:'左右タップ',tipDrag:'指を左右にスライド',zone:'ゾーン',worn:'着用中',use:'着る',missing:n=>`星があと${n}個必要`,mute:'ミュート',unmute:'サウンドON',canvas:'ゲーム：空へジャンプするひつじ',lang:'言語',
-    zones:['草原','高い空','夕焼け','夜','宇宙'],skinN:['クラシック','黒ひつじ','わたあめ','カウボーイ','王さま','にじいろ','宇宙飛行士','ゴールド']},
+    zones:['草原','高い空','夕焼け','夜','宇宙'],skinN:['クラシック','黒ひつじ','わたあめ','カウボーイ','王さま','にじいろ','宇宙飛行士','ゴールド','お医者さん','シェフ','海賊','忍者','ミツバチ','クモ','魔法使い','吸血鬼','ユニコーン']},
   ko:{name:'한국어',tag:'하늘까지 점프하는 양',intro:'구름에서 구름으로 튕기며 최대한 높이 올라가세요.',tipL:'왼쪽 터치',tipR:'오른쪽 터치',tipS:'별 = 슈퍼 점프',warn:'다섯 구역마다 위험이 있어요. 새와 박쥐는 밟을 수 있지만 운석은 안 돼요.',play:'점프!',skins:'코스튬',best:'최고 기록',yourStars:'내 별',fall:'떨어졌어요!',ouch:'아야!',wow:'엄청 높아요!',reached:'도달: ',newRec:'새 기록',starsLbl:'별',points:'점수',earned:'획득',have:'보유',again:'다시 하기',shopHint:'하늘에서 별을 잡고, 100m 올라갈 때마다 별 1개를 더 받아요.',done:'완료',revive:'부활',double:'별 ×2',watch:'광고 보기',privacy:'개인정보',adFail:'광고를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.',sens:'감도',sLow:'낮음',sNormal:'보통',sHigh:'높음',ctrl:'조작',mDrag:'밀기',mTap:'좌우 터치',tipDrag:'손가락을 좌우로 밀어요',zone:'구역',worn:'착용 중',use:'착용',missing:n=>`별이 ${n}개 더 필요해요`,mute:'음소거',unmute:'소리 켜기',canvas:'게임: 하늘로 점프하는 양',lang:'언어',
-    zones:['초원','높은 하늘','노을','밤','우주'],skinN:['클래식','검은 양','솜사탕','카우보이','왕','무지개','우주비행사','황금']},
+    zones:['초원','높은 하늘','노을','밤','우주'],skinN:['클래식','검은 양','솜사탕','카우보이','왕','무지개','우주비행사','황금','의사','셰프','해적','닌자','꿀벌','거미','마법사','뱀파이어','유니콘']},
 };
 function detectLang(){
   const saved=load('borrego_lang',null); if(saved&&LANGS[saved])return saved;
@@ -224,6 +224,15 @@ const SKINS=[
   {id:'arcoiris',name:'Arcoíris',    price:60,  wool:'rainbow',line:'#3a4466',face:'#2e2a3d'},
   {id:'astro',   name:'Astronauta',  price:80,  wool:'#e9eef7',line:'#3a4466',face:'#2e2a3d',hat:'helmet'},
   {id:'dorado',  name:'Dorado',      price:120, wool:'#ffd766',line:'#a86f00',face:'#5a3b00',hat:'sparkle'},
+  {id:'medico',  name:'Médico',      price:25,  wool:'#8fd8cf',line:'#2f7f78',face:'#2e2a3d',hat:'scrubs'},
+  {id:'chef',    name:'Chef',        price:30,  wool:'#fffdf7',line:'#3a4466',face:'#2e2a3d',hat:'chef'},
+  {id:'pirata',  name:'Pirata',      price:40,  wool:'#fffdf7',line:'#3a4466',face:'#2e2a3d',hat:'pirate'},
+  {id:'ninja',   name:'Ninja',       price:50,  wool:'#3a3f58',line:'#171a28',face:'#1e1b29',hat:'ninja'},
+  {id:'abeja',   name:'Abeja',       price:55,  wool:'bee',    line:'#3a2a00',face:'#2e2a3d',hat:'bee',back:'wings'},
+  {id:'arana',   name:'Araña',       price:65,  wool:'#2b2433',line:'#0f0b14',face:'#1a1520',hat:'spider',back:'spiderlegs'},
+  {id:'mago',    name:'Mago',        price:75,  wool:'#fffdf7',line:'#3a4466',face:'#2e2a3d',hat:'wizard'},
+  {id:'vampiro', name:'Vampiro',     price:90,  wool:'#e9e4f2',line:'#3a2f4f',face:'#2e2a3d',hat:'vampire',back:'cape'},
+  {id:'unicornio',name:'Unicornio',  price:150, wool:'#fff4fb',line:'#b06aa0',face:'#2e2a3d',hat:'unicorn'},
 ];
 const skinOf=id=>SKINS.find(s=>s.id===id)||SKINS[0];
 if(!owned.includes(skinId))skinId='clasico';
@@ -500,11 +509,11 @@ function showBanner(i){
 /* ---------- tienda ---------- */
 function buildShop(){
   const grid=$('grid');grid.innerHTML='';
-  for(const sk of SKINS){
+  for(const sk of [...SKINS].sort((a,b)=>a.price-b.price)){
     const it=document.createElement('div');it.className='item'+(sk.id===skinId?' on':'');
     const c=document.createElement('canvas');c.width=192;c.height=160;
     const g=c.getContext('2d');g.scale(2,2);
-    drawSheep(g,{x:40,y:68,sq:1,face:1,vy:0,dead:false,blink:false},sk,1.55);
+    drawSheep(g,{x:44,y:76,sq:1,face:1,vy:0,dead:false,blink:false},sk,1.2);
     const nm=document.createElement('div');nm.textContent=t('skinN')[SKINS.indexOf(sk)];
     const bt=document.createElement('button');
     const have=owned.includes(sk.id);
@@ -734,21 +743,40 @@ function drawSheep(g,sh,sk,sc=1){
   const sx=1+(1-sh.sq)*.6;g.scale(sh.face*sx*sc,sh.sq*sc);
   if(sh.dead)g.rotate(Math.sin(time*20)*.3);
   const tuck=sh.vy<-200;
+  if(sk.back==='wings'){ // alas de abeja, aletean
+    const f=Math.sin(time*40)*.35;
+    g.fillStyle='rgba(220,240,255,.75)';g.strokeStyle='rgba(90,120,160,.6)';g.lineWidth=1;
+    g.beginPath();g.ellipse(-6,-36,6,11,-.5+f,0,7);g.fill();g.stroke();
+    g.beginPath();g.ellipse(2,-38,5,10,.2-f,0,7);g.fill();g.stroke();
+  }else if(sk.back==='spiderlegs'){ // 6 patas extra de araña
+    g.strokeStyle='#1a1520';g.lineWidth=2.2;g.lineCap='round';
+    const w=Math.sin(time*10)*2;
+    for(const [ox,dir,len] of [[-8,-1,1.35],[-4,-1,1.2],[0,-1,1.05],[2,1,1.05],[6,1,1.2],[10,1,1.35]]){
+      g.beginPath();g.moveTo(ox,-14);g.lineTo(ox+dir*12*len,-22-w);g.lineTo(ox+dir*18*len,-6+w);g.stroke();
+    }
+  }else if(sk.back==='cape'){ // capa de vampiro
+    const cw=Math.sin(time*6)*2;g.fillStyle='#1b1424';g.beginPath();g.moveTo(12,-32);g.quadraticCurveTo(-30,-40,-30+cw,2);g.lineTo(-20,-4);g.lineTo(-13,4);g.lineTo(-5,-2);g.lineTo(12,-14);g.closePath();g.fill();
+    g.fillStyle='#b3263a';g.beginPath();g.moveTo(10,-28);g.quadraticCurveTo(-18,-30,-17,-6);g.lineTo(-8,-10);g.lineTo(8,-16);g.closePath();g.fill();
+  }
   g.fillStyle=sk.face;
   for(const lx of[-9,-3,4,10]){g.fillRect(lx-2,tuck?-10:-8,4,tuck?6:8)}
   g.fillStyle=sk.line;
   for(const [x,y,r] of WOOL){g.beginPath();g.arc(x,y,r+2.2,0,7);g.fill()}
   WOOL.forEach(([x,y,r],i)=>{
-    g.fillStyle=sk.wool==='rainbow'?`hsl(${(i*45+time*140)%360},85%,82%)`:sk.wool;
+    g.fillStyle=sk.wool==='rainbow'?`hsl(${(i*45+time*140)%360},85%,82%)`:sk.wool==='bee'?'#ffd23f':sk.wool;
     g.beginPath();g.arc(x,y,r,0,7);g.fill();
   });
+  if(sk.wool==='bee'){ // rayas negras recortadas a la forma de la lana
+    g.save();g.beginPath();for(const [x,y,r] of WOOL){g.moveTo(x+r,y);g.arc(x,y,r,0,7)}g.clip();
+    g.fillStyle='#2b2433';g.fillRect(-12,-40,6,40);g.fillRect(1,-40,6,40);g.restore();
+  }
   g.fillStyle='rgba(58,68,102,.12)';g.beginPath();g.arc(2,-11,9,0,7);g.fill();
   // cabeza
   g.fillStyle=sk.face;
   g.beginPath();g.ellipse(16,-24,7.5,9,.25,0,7);g.fill();
   g.beginPath();g.ellipse(10,-29,5,2.6,-.6,0,7);g.fill();
   g.beginPath();g.ellipse(21,-31,5,2.6,.7,0,7);g.fill();
-  g.fillStyle=sk.wool==='rainbow'?'#fffdf7':sk.wool;g.beginPath();g.arc(14,-33,4.5,0,7);g.arc(18,-34,3.5,0,7);g.fill();
+  g.fillStyle=(sk.wool==='rainbow'||sk.wool==='bee')?'#fffdf7':sk.wool;g.beginPath();g.arc(14,-33,4.5,0,7);g.arc(18,-34,3.5,0,7);g.fill();
   if(sh.dead){
     g.strokeStyle='#fff';g.lineWidth=1.6;g.beginPath();
     g.moveTo(16,-27);g.lineTo(20,-23);g.moveTo(20,-27);g.lineTo(16,-23);g.stroke();
@@ -771,6 +799,49 @@ function drawSheep(g,sh,sk,sc=1){
     g.beginPath();g.arc(16,-27,14,0,7);g.fill();g.stroke();
     g.strokeStyle='rgba(255,255,255,.8)';g.lineWidth=2;g.beginPath();g.arc(16,-27,10,-2.4,-1.6);g.stroke();
     g.fillStyle='#c9d6ea';g.fillRect(12,-43,2,4);g.fillStyle='#ff5a3d';g.beginPath();g.arc(13,-44,2,0,7);g.fill();
+  }else if(sk.hat==='scrubs'){ // gorro quirúrgico + estetoscopio
+    g.fillStyle='#3fb3a6';g.beginPath();g.ellipse(15.5,-32,9,5.5,.15,Math.PI,0);g.lineTo(24.5,-31);g.lineTo(6.5,-31);g.fill();
+    g.fillRect(6.5,-32,18,2.5);
+    g.strokeStyle='#5c6b7a';g.lineWidth=1.6;g.beginPath();g.moveTo(11,-19);g.quadraticCurveTo(4,-14,6,-6);g.stroke();
+    g.beginPath();g.moveTo(15,-18);g.quadraticCurveTo(12,-12,6,-6);g.stroke();
+    g.fillStyle='#c9d3dd';g.beginPath();g.arc(6,-5,2.8,0,7);g.fill();g.strokeStyle='#5c6b7a';g.lineWidth=1;g.stroke();
+  }else if(sk.hat==='chef'){
+    g.fillStyle='#fff';g.strokeStyle='#c9d1de';g.lineWidth=1.2;
+    g.beginPath();g.arc(11,-43,5,0,7);g.arc(16,-46,6,0,7);g.arc(21,-43,5,0,7);g.fill();g.stroke();
+    g.fillRect(9,-41,14,7);g.strokeRect(9,-41,14,7);
+    g.fillStyle='#e04848';g.beginPath();g.moveTo(10,-18);g.lineTo(20,-17);g.lineTo(15,-13);g.closePath();g.fill();
+  }else if(sk.hat==='pirate'){
+    g.fillStyle='#d6363b';g.beginPath();g.ellipse(15.5,-31,9,5,.15,Math.PI,0);g.lineTo(24,-30);g.lineTo(7,-30);g.fill();
+    g.fillStyle='#fff';for(const [dx,dy] of [[12,-33],[17,-34],[21,-32]]){g.beginPath();g.arc(dx,dy,1,0,7);g.fill()}
+    g.fillStyle='#d6363b';g.beginPath();g.moveTo(7,-31);g.lineTo(1,-34);g.lineTo(2,-27);g.closePath();g.fill();
+    if(!sh.dead){g.fillStyle='#111';g.beginPath();g.arc(18.8,-25.5,3.3,0,7);g.fill();
+      g.strokeStyle='#111';g.lineWidth=1;g.beginPath();g.moveTo(10,-29);g.lineTo(22,-23);g.stroke()}
+  }else if(sk.hat==='ninja'){
+    g.fillStyle='#d6363b';g.fillRect(8,-30,16,3.5);
+    const fl=Math.sin(time*12)*2;
+    g.beginPath();g.moveTo(8,-30);g.lineTo(-2,-33+fl);g.lineTo(-1,-29+fl);g.lineTo(8,-27);g.fill();
+    g.beginPath();g.moveTo(8,-29);g.lineTo(-1,-25-fl);g.lineTo(1,-22-fl);g.lineTo(8,-27);g.fill();
+  }else if(sk.hat==='bee'){
+    g.strokeStyle='#2b2433';g.lineWidth=1.4;
+    g.beginPath();g.moveTo(14,-33);g.quadraticCurveTo(12,-40,9,-43);g.moveTo(18,-33);g.quadraticCurveTo(20,-40,23,-43);g.stroke();
+    g.fillStyle='#2b2433';g.beginPath();g.arc(9,-43,2,0,7);g.arc(23,-43,2,0,7);g.fill();
+  }else if(sk.hat==='spider'){ // ojitos extra de araña
+    g.fillStyle='#e8394b';for(const [ex,ey,r] of [[13,-28,1.3],[15.5,-30,1.1],[21.5,-28,1.2],[19,-30.5,1]]){g.beginPath();g.arc(ex,ey,r,0,7);g.fill()}
+    g.fillStyle='#8a2be2';g.beginPath();g.moveTo(-2,-21);g.lineTo(2,-17);g.lineTo(-2,-13);g.lineTo(-6,-17);g.closePath();g.fill();
+  }else if(sk.hat==='wizard'){
+    g.fillStyle='#4b3fa8';g.beginPath();g.ellipse(16,-34,13,3,-.08,0,7);g.fill();
+    g.beginPath();g.moveTo(8,-34);g.quadraticCurveTo(13,-44,10,-56);g.quadraticCurveTo(19,-46,24,-34);g.closePath();g.fill();
+    g.fillStyle='#ffd23f';starPath(g,15,-41,2.6,1.1,0);g.fill();starPath(g,19,-36.5,1.8,.8,0);g.fill();
+  }else if(sk.hat==='vampire'){
+    g.fillStyle='#b3263a';g.beginPath();g.moveTo(8,-18);g.lineTo(5,-27);g.lineTo(12,-20);g.closePath();g.fill();
+    g.fillStyle='#fff';g.beginPath();g.moveTo(17.5,-18.5);g.lineTo(18.3,-15.5);g.lineTo(19.1,-18.5);g.moveTo(20,-18.5);g.lineTo(20.8,-15.5);g.lineTo(21.6,-18.5);g.fill();
+    g.fillStyle='#1b1424';g.beginPath();g.moveTo(11,-31);g.lineTo(16,-27);g.lineTo(21,-31);g.lineTo(16,-34);g.closePath();g.fill();
+  }else if(sk.hat==='unicorn'){
+    const mane=['#ff8fc8','#b48cff','#7fd8ff','#ffd36b'];
+    mane.forEach((c,i)=>{g.fillStyle=c;g.beginPath();g.arc(8-i*2,-30+i*4,3.6,0,7);g.fill()});
+    g.fillStyle='#ffd766';g.strokeStyle='#c99a1c';g.lineWidth=1;
+    g.beginPath();g.moveTo(17,-32);g.lineTo(24,-48);g.lineTo(21,-31);g.closePath();g.fill();g.stroke();
+    g.beginPath();g.moveTo(18.5,-36);g.lineTo(22,-37.5);g.moveTo(19.5,-40);g.lineTo(22.8,-41.5);g.stroke();
   }else if(sk.hat==='sparkle'){
     g.fillStyle='#fff6c2';
     for(let i=0;i<3;i++){const a=time*2+i*2.1;starPath(g,Math.cos(a)*20,-20+Math.sin(a)*16,4,1.6,0);g.fill()}
