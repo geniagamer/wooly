@@ -7,6 +7,7 @@ El juego ya está listo como app de Android (hecha con Capacitor). Solo falta co
 - `www/index.html` es el juego completo. Si quieres cambiar algo del juego, se cambia aquí.
 - `android/` es el proyecto de Android Studio. Ya tiene el ícono, la pantalla de inicio y la orientación vertical.
 - `ANUNCIOS.md` explica cómo activar los anuncios con tu cuenta de AdMob y cobrar.
+- `RECORDS.md` explica cómo activar la tabla de récords mundial con Google Play Juegos.
 - `politica-privacidad.md` es una plantilla de política de privacidad (español e inglés).
 - `textos-tienda.md` tiene el título y las descripciones de la tienda en 8 idiomas.
 - `assets/` tiene las imágenes para la ficha de la tienda: ícono de 512x512, gráfico destacado de 1024x500 y capturas.

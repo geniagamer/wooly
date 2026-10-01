@@ -6,4 +6,7 @@
     <string name="custom_url_scheme">com.borregoalcielo.juego</string>
     <!-- Cambia esto por el ID de tu app de AdMob (empieza con ca-app-pub- y tiene una ~) -->
     <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <!-- Google Play Juegos (récords mundiales). Ver RECORDS.md. "0" = apagado -->
+    <string name="game_services_project_id" translatable="false">0</string>
+    <string name="leaderboard_height" translatable="false">PENDIENTE</string>
 </resources>

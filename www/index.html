@@ -58,6 +58,21 @@ h2{margin:0;font-size:28px;font-weight:900}
 .new{background:var(--sun);border-radius:999px;padding:3px 12px;font-size:13px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
 .earn{font-weight:900;font-size:16px}
 .adrow{display:flex;gap:10px;width:100%}
+.btnrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.hasdot{position:relative}
+.dot{position:absolute;top:-3px;right:-3px;width:14px;height:14px;border-radius:50%;background:var(--btn);border:2px solid var(--wool)}
+.lbBtn{font-size:15px}
+.mlist{display:flex;flex-direction:column;gap:10px;width:100%}
+.mrow{background:var(--soft);border-radius:16px;padding:10px 12px;display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;text-align:left}
+.mrow b{font-size:14px;line-height:1.25}
+.mrow .bar{grid-column:1;height:8px;border-radius:99px;background:#d3e3f3;overflow:hidden}
+.mrow .bar i{display:block;height:100%;background:var(--btn);border-radius:99px}
+.mrow small{grid-column:1;font-size:12px;font-weight:800;opacity:.7;font-variant-numeric:tabular-nums}
+.mrow button{grid-column:2;grid-row:1/4;border:0;border-radius:999px;padding:8px 12px;font:inherit;font-weight:900;font-size:13px;background:var(--sun);color:var(--ink);cursor:pointer;min-width:84px}
+.mrow button[disabled]{opacity:.5;cursor:default}
+.mrow button.ok{background:#7cc56b;color:#fff;opacity:1}
+.mrow.done{opacity:.7}
+.toast{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 74px);transform:translateX(-50%);background:var(--wool);color:var(--ink);border-radius:999px;padding:8px 16px;font-weight:900;font-size:15px;box-shadow:0 4px 0 rgba(36,48,79,.25);pointer-events:none;max-width:calc(100% - 48px);width:max-content;text-align:center;line-height:1.25;border-radius:18px}
 .sens{display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:800;font-size:13px;width:100%}
 .seg{display:flex;background:var(--soft);border-radius:999px;padding:3px;gap:2px;width:100%;max-width:270px}
 .seg button{flex:1;border:0;background:none;border-radius:999px;padding:7px 4px;font:inherit;font-weight:800;font-size:13px;color:var(--ink);cursor:pointer}
@@ -94,6 +109,7 @@ h2{margin:0;font-size:28px;font-weight:900}
     <div class="alt"><small id="zoneName">Pradera</small><b id="h">0 m</b></div>
     <div class="right"><div class="pill"><i>★</i><span id="s">0</span></div><button class="icon-btn mute" aria-label="Silenciar">♪</button></div>
   </div>
+  <div class="toast" id="toast" hidden></div>
   <div class="banner" id="banner" hidden><small id="banZ">Zona 2</small><b id="banN">Cielo alto</b></div>
 
   <div class="screen" id="menu">
@@ -109,7 +125,11 @@ h2{margin:0;font-size:28px;font-weight:900}
       <p style="font-size:13px;opacity:.8" data-i18n="warn">Cinco zonas, cada una con sus peligros. A los pájaros y murciélagos puedes caerles encima. A los meteoritos no.</p>
       <div class="btns">
         <button class="go" id="play" data-i18n="play">¡A saltar!</button>
-        <button class="go alt2" id="shopBtn1" data-i18n="skins">Disfraces</button>
+        <div class="btnrow">
+          <button class="go alt2" id="shopBtn1" data-i18n="skins">Disfraces</button>
+          <button class="go alt2 hasdot" id="misBtn1"><span data-i18n="missions">Misiones</span><i class="dot" hidden></i></button>
+        </div>
+        <button class="go alt2 lbBtn" id="lbBtn1" hidden>🏆 <span data-i18n="world">Récords mundiales</span></button>
       </div>
       <div class="row"><div><span data-i18n="best">Récord</span><b id="best0">0 m</b></div><div><span data-i18n="yourStars">Tus estrellas</span><b><span class="st">★</span> <span class="walletTxt">0</span></b></div></div>
       <div class="sens" role="group" aria-labelledby="ctrlLbl"><span id="ctrlLbl" data-i18n="ctrl">Control</span><div class="seg" id="ctrlSeg"><button data-c="0" data-i18n="mDrag">Deslizar</button><button data-c="1" data-i18n="mTap">Tocar lados</button></div></div>
@@ -134,8 +154,21 @@ h2{margin:0;font-size:28px;font-weight:900}
         </div>
         <div class="zone-lbl" id="adMsg" hidden data-i18n="adFail">El anuncio no cargó.</div>
         <button class="go" id="again" data-i18n="again">Otra vez</button>
-        <button class="go alt2" id="shopBtn2" data-i18n="skins">Disfraces</button>
+        <div class="btnrow">
+          <button class="go alt2" id="shopBtn2" data-i18n="skins">Disfraces</button>
+          <button class="go alt2 hasdot" id="misBtn2"><span data-i18n="missions">Misiones</span><i class="dot" hidden></i></button>
+        </div>
+        <button class="go alt2 lbBtn" id="lbBtn2" hidden>🏆 <span data-i18n="world">Récords mundiales</span></button>
       </div>
+    </div>
+  </div>
+
+  <div class="screen" id="mis" hidden>
+    <div class="card">
+      <h2 data-i18n="missions">Misiones</h2>
+      <div class="mlist" id="mlist"></div>
+      <p style="font-size:13px;opacity:.75" data-i18n="mFresh">Nuevas misiones cada día</p>
+      <button class="go" id="misBack" data-i18n="done">Listo</button>
     </div>
   </div>
 
@@ -183,22 +216,22 @@ let sens=Math.min(2,Math.max(0,+load('borrego_sens',1)||0));
 
 /* ---------- idiomas ---------- */
 const LANGS={
-  es:{name:'Español',tag:'el borrego que salta al cielo',intro:'Rebota de nube en nube y llega lo más alto que puedas.',tipL:'Toca a la izquierda',tipR:'Toca a la derecha',tipS:'Estrella = súper salto',warn:'Cinco zonas, cada una con sus peligros. A los pájaros y murciélagos puedes caerles encima. A los meteoritos no.',play:'¡A saltar!',skins:'Disfraces',best:'Récord',yourStars:'Tus estrellas',fall:'¡Se cayó!',ouch:'¡Auch!',wow:'¡Qué altura!',reached:'Llegaste a: ',newRec:'Nuevo récord',starsLbl:'Estrellas',points:'Puntos',earned:'Ganaste',have:'tienes',again:'Otra vez',shopHint:'Gana estrellas atrapándolas en el cielo, y una más por cada 100 m que subas.',done:'Listo',revive:'Revivir',double:'×2 estrellas',watch:'Ver anuncio',privacy:'Privacidad',adFail:'El anuncio no cargó. Intenta en un momento.',sens:'Sensibilidad',sLow:'Baja',sNormal:'Normal',sHigh:'Alta',ctrl:'Control',mDrag:'Deslizar',mTap:'Tocar lados',tipDrag:'Desliza el dedo a los lados',zone:'Zona',worn:'Puesto',use:'Usar',missing:n=>`Te faltan ${n} estrellas`,mute:'Silenciar',unmute:'Activar sonido',canvas:'Juego: borrego que salta hacia el cielo',lang:'Idioma',
-    zones:['Pradera','Cielo alto','Atardecer','Noche','Espacio'],skinN:['Clásico','Oveja negra','Algodón','Vaquero','Rey','Arcoíris','Astronauta','Dorado','Médico','Chef','Pirata','Ninja','Abeja','Araña','Mago','Vampiro','Unicornio']},
-  en:{name:'English',tag:'the sheep who jumps to the sky',intro:'Bounce from cloud to cloud and climb as high as you can.',tipL:'Tap left',tipR:'Tap right',tipS:'Star = super jump',warn:'Five zones, each with its own dangers. You can land on birds and bats. Not on meteors.',play:'Jump!',skins:'Costumes',best:'Best',yourStars:'Your stars',fall:'It fell!',ouch:'Ouch!',wow:'What a height!',reached:'You reached: ',newRec:'New record',starsLbl:'Stars',points:'Points',earned:'You earned',have:'you have',again:'Play again',shopHint:'Earn stars by catching them in the sky, plus one for every 100 m you climb.',done:'Done',revive:'Revive',double:'×2 stars',watch:'Watch an ad',privacy:'Privacy',adFail:'The ad didn’t load. Try again in a moment.',sens:'Sensitivity',sLow:'Low',sNormal:'Normal',sHigh:'High',ctrl:'Controls',mDrag:'Slide',mTap:'Tap sides',tipDrag:'Slide your finger left and right',zone:'Zone',worn:'Wearing',use:'Use',missing:n=>`You need ${n} more stars`,mute:'Mute',unmute:'Turn sound on',canvas:'Game: a sheep jumping up to the sky',lang:'Language',
-    zones:['Meadow','High Sky','Sunset','Night','Space'],skinN:['Classic','Black Sheep','Cotton Candy','Cowboy','King','Rainbow','Astronaut','Golden','Doctor','Chef','Pirate','Ninja','Bee','Spider','Wizard','Vampire','Unicorn']},
-  pt:{name:'Português',tag:'a ovelhinha que pula até o céu',intro:'Pule de nuvem em nuvem e suba o mais alto que puder.',tipL:'Toque à esquerda',tipR:'Toque à direita',tipS:'Estrela = superpulo',warn:'Cinco zonas, cada uma com seus perigos. Você pode cair em cima dos pássaros e morcegos. Dos meteoros, não.',play:'Pular!',skins:'Fantasias',best:'Recorde',yourStars:'Suas estrelas',fall:'Caiu!',ouch:'Ai!',wow:'Que altura!',reached:'Você chegou a: ',newRec:'Novo recorde',starsLbl:'Estrelas',points:'Pontos',earned:'Ganhou',have:'você tem',again:'De novo',shopHint:'Ganhe estrelas pegando-as no céu, e mais uma a cada 100 m que subir.',done:'Pronto',revive:'Reviver',double:'×2 estrelas',watch:'Ver anúncio',privacy:'Privacidade',adFail:'O anúncio não carregou. Tente de novo daqui a pouco.',sens:'Sensibilidade',sLow:'Baixa',sNormal:'Normal',sHigh:'Alta',ctrl:'Controle',mDrag:'Deslizar',mTap:'Tocar lados',tipDrag:'Deslize o dedo para os lados',zone:'Zona',worn:'Usando',use:'Usar',missing:n=>`Faltam ${n} estrelas`,mute:'Silenciar',unmute:'Ativar som',canvas:'Jogo: ovelhinha pulando até o céu',lang:'Idioma',
-    zones:['Campo','Céu alto','Pôr do sol','Noite','Espaço'],skinN:['Clássica','Ovelha negra','Algodão-doce','Caubói','Rei','Arco-íris','Astronauta','Dourada','Médico','Chef','Pirata','Ninja','Abelha','Aranha','Mago','Vampiro','Unicórnio']},
-  fr:{name:'Français',tag:'le mouton qui saute jusqu’au ciel',intro:'Rebondis de nuage en nuage et monte le plus haut possible.',tipL:'Touche à gauche',tipR:'Touche à droite',tipS:'Étoile = super saut',warn:'Cinq zones, chacune avec ses dangers. Tu peux sauter sur les oiseaux et les chauves-souris. Pas sur les météorites.',play:'On saute !',skins:'Costumes',best:'Record',yourStars:'Tes étoiles',fall:'Il est tombé !',ouch:'Aïe !',wow:'Quelle hauteur !',reached:'Tu as atteint : ',newRec:'Nouveau record',starsLbl:'Étoiles',points:'Points',earned:'Gagné',have:'tu as',again:'Rejouer',shopHint:'Gagne des étoiles en les attrapant dans le ciel, plus une tous les 100 m.',done:'OK',revive:'Revivre',double:'×2 étoiles',watch:'Voir une pub',privacy:'Confidentialité',adFail:'La pub n’a pas chargé. Réessaie dans un instant.',sens:'Sensibilité',sLow:'Basse',sNormal:'Normale',sHigh:'Haute',ctrl:'Contrôles',mDrag:'Glisser',mTap:'Toucher les côtés',tipDrag:'Fais glisser ton doigt à gauche et à droite',zone:'Zone',worn:'Porté',use:'Mettre',missing:n=>`Il te manque ${n} étoiles`,mute:'Couper le son',unmute:'Activer le son',canvas:'Jeu : un mouton qui saute vers le ciel',lang:'Langue',
-    zones:['Prairie','Haut du ciel','Coucher de soleil','Nuit','Espace'],skinN:['Classique','Mouton noir','Barbe à papa','Cowboy','Roi','Arc-en-ciel','Astronaute','Doré','Docteur','Chef','Pirate','Ninja','Abeille','Araignée','Magicien','Vampire','Licorne']},
-  de:{name:'Deutsch',tag:'das Schaf, das in den Himmel springt',intro:'Hüpf von Wolke zu Wolke und komm so hoch wie möglich.',tipL:'Links tippen',tipR:'Rechts tippen',tipS:'Stern = Supersprung',warn:'Fünf Zonen mit eigenen Gefahren. Auf Vögel und Fledermäuse kannst du springen. Auf Meteore nicht.',play:'Los geht’s!',skins:'Kostüme',best:'Rekord',yourStars:'Deine Sterne',fall:'Abgestürzt!',ouch:'Autsch!',wow:'Was für eine Höhe!',reached:'Erreicht: ',newRec:'Neuer Rekord',starsLbl:'Sterne',points:'Punkte',earned:'Verdient',have:'du hast',again:'Nochmal',shopHint:'Fang Sterne am Himmel und bekomm einen extra für je 100 m Höhe.',done:'Fertig',revive:'Wiederbeleben',double:'×2 Sterne',watch:'Werbung ansehen',privacy:'Datenschutz',adFail:'Die Werbung hat nicht geladen. Versuch es gleich nochmal.',sens:'Empfindlichkeit',sLow:'Niedrig',sNormal:'Normal',sHigh:'Hoch',ctrl:'Steuerung',mDrag:'Wischen',mTap:'Seiten tippen',tipDrag:'Wisch mit dem Finger nach links und rechts',zone:'Zone',worn:'An',use:'Anziehen',missing:n=>`Dir fehlen ${n} Sterne`,mute:'Ton aus',unmute:'Ton an',canvas:'Spiel: ein Schaf springt in den Himmel',lang:'Sprache',
-    zones:['Wiese','Hoher Himmel','Abendrot','Nacht','Weltraum'],skinN:['Klassisch','Schwarzes Schaf','Zuckerwatte','Cowboy','König','Regenbogen','Astronaut','Golden','Arzt','Koch','Pirat','Ninja','Biene','Spinne','Zauberer','Vampir','Einhorn']},
-  it:{name:'Italiano',tag:'la pecorella che salta fino al cielo',intro:'Rimbalza di nuvola in nuvola e sali più in alto che puoi.',tipL:'Tocca a sinistra',tipR:'Tocca a destra',tipS:'Stella = super salto',warn:'Cinque zone, ognuna con i suoi pericoli. Puoi saltare su uccelli e pipistrelli. Sui meteoriti no.',play:'Salta!',skins:'Costumi',best:'Record',yourStars:'Le tue stelle',fall:'È caduta!',ouch:'Ahi!',wow:'Che altezza!',reached:'Sei arrivato a: ',newRec:'Nuovo record',starsLbl:'Stelle',points:'Punti',earned:'Hai vinto',have:'ne hai',again:'Ancora',shopHint:'Guadagna stelle prendendole in cielo, più una ogni 100 m di salita.',done:'Fatto',revive:'Rinasci',double:'×2 stelle',watch:'Guarda la pubblicità',privacy:'Privacy',adFail:'La pubblicità non si è caricata. Riprova tra poco.',sens:'Sensibilità',sLow:'Bassa',sNormal:'Normale',sHigh:'Alta',ctrl:'Controlli',mDrag:'Scorri',mTap:'Tocca i lati',tipDrag:'Scorri il dito a destra e a sinistra',zone:'Zona',worn:'Indossato',use:'Usa',missing:n=>`Ti mancano ${n} stelle`,mute:'Disattiva audio',unmute:'Attiva audio',canvas:'Gioco: una pecorella che salta verso il cielo',lang:'Lingua',
-    zones:['Prato','Cielo alto','Tramonto','Notte','Spazio'],skinN:['Classica','Pecora nera','Zucchero filato','Cowboy','Re','Arcobaleno','Astronauta','Dorata','Dottore','Chef','Pirata','Ninja','Ape','Ragno','Mago','Vampiro','Unicorno']},
-  ja:{name:'日本語',tag:'空までジャンプするひつじ',intro:'雲から雲へはねて、できるだけ高くのぼろう。',tipL:'左をタップ',tipR:'右をタップ',tipS:'星 = スーパージャンプ',warn:'5つのゾーンにそれぞれ危険がいっぱい。鳥とコウモリは踏めるけど、隕石はダメ。',play:'ジャンプ！',skins:'きせかえ',best:'ベスト',yourStars:'星の数',fall:'落ちちゃった！',ouch:'いたっ！',wow:'すごい高さ！',reached:'到達：',newRec:'新記録',starsLbl:'星',points:'ポイント',earned:'獲得',have:'所持',again:'もう一回',shopHint:'空で星をつかまえよう。100mのぼるごとに1つもらえるよ。',done:'OK',revive:'復活',double:'星×2',watch:'広告を見る',privacy:'プライバシー',adFail:'広告を読み込めませんでした。少し待ってからもう一度どうぞ。',sens:'感度',sLow:'低',sNormal:'中',sHigh:'高',ctrl:'操作',mDrag:'スライド',mTap:'左右タップ',tipDrag:'指を左右にスライド',zone:'ゾーン',worn:'着用中',use:'着る',missing:n=>`星があと${n}個必要`,mute:'ミュート',unmute:'サウンドON',canvas:'ゲーム：空へジャンプするひつじ',lang:'言語',
-    zones:['草原','高い空','夕焼け','夜','宇宙'],skinN:['クラシック','黒ひつじ','わたあめ','カウボーイ','王さま','にじいろ','宇宙飛行士','ゴールド','お医者さん','シェフ','海賊','忍者','ミツバチ','クモ','魔法使い','吸血鬼','ユニコーン']},
-  ko:{name:'한국어',tag:'하늘까지 점프하는 양',intro:'구름에서 구름으로 튕기며 최대한 높이 올라가세요.',tipL:'왼쪽 터치',tipR:'오른쪽 터치',tipS:'별 = 슈퍼 점프',warn:'다섯 구역마다 위험이 있어요. 새와 박쥐는 밟을 수 있지만 운석은 안 돼요.',play:'점프!',skins:'코스튬',best:'최고 기록',yourStars:'내 별',fall:'떨어졌어요!',ouch:'아야!',wow:'엄청 높아요!',reached:'도달: ',newRec:'새 기록',starsLbl:'별',points:'점수',earned:'획득',have:'보유',again:'다시 하기',shopHint:'하늘에서 별을 잡고, 100m 올라갈 때마다 별 1개를 더 받아요.',done:'완료',revive:'부활',double:'별 ×2',watch:'광고 보기',privacy:'개인정보',adFail:'광고를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.',sens:'감도',sLow:'낮음',sNormal:'보통',sHigh:'높음',ctrl:'조작',mDrag:'밀기',mTap:'좌우 터치',tipDrag:'손가락을 좌우로 밀어요',zone:'구역',worn:'착용 중',use:'착용',missing:n=>`별이 ${n}개 더 필요해요`,mute:'음소거',unmute:'소리 켜기',canvas:'게임: 하늘로 점프하는 양',lang:'언어',
-    zones:['초원','높은 하늘','노을','밤','우주'],skinN:['클래식','검은 양','솜사탕','카우보이','왕','무지개','우주비행사','황금','의사','셰프','해적','닌자','꿀벌','거미','마법사','뱀파이어','유니콘']},
+  es:{name:'Español',tag:'el borrego que salta al cielo',intro:'Rebota de nube en nube y llega lo más alto que puedas.',tipL:'Toca a la izquierda',tipR:'Toca a la derecha',tipS:'Estrella = súper salto',warn:'Siete zonas, poderes y un jefe final. A los pájaros y murciélagos puedes caerles encima. A los meteoritos no.',play:'¡A saltar!',skins:'Disfraces',best:'Récord',yourStars:'Tus estrellas',fall:'¡Se cayó!',ouch:'¡Auch!',wow:'¡Qué altura!',reached:'Llegaste a: ',newRec:'Nuevo récord',starsLbl:'Estrellas',points:'Puntos',earned:'Ganaste',have:'tienes',again:'Otra vez',shopHint:'Gana estrellas atrapándolas en el cielo, y una más por cada 100 m que subas.',done:'Listo',revive:'Revivir',double:'×2 estrellas',watch:'Ver anuncio',privacy:'Privacidad',adFail:'El anuncio no cargó. Intenta en un momento.',sens:'Sensibilidad',sLow:'Baja',sNormal:'Normal',sHigh:'Alta',ctrl:'Control',mDrag:'Deslizar',mTap:'Tocar lados',tipDrag:'Desliza el dedo a los lados',missions:'Misiones',claim:'Reclamar',mFresh:'Nuevas misiones cada día',mDone:'¡Misión cumplida!',world:'Récords mundiales',lbFail:'No se pudo abrir la tabla de récords.',m_height:n=>`Llega a ${n} m en una partida`,m_runStars:n=>`Atrapa ${n} estrellas en una partida`,m_stomp:n=>`Aplasta ${n} enemigos`,m_power:n=>`Usa ${n} poderes`,m_play:n=>`Juega ${n} partidas`,m_zone:z=>`Llega a la zona ${z}`,m_dayStars:n=>`Atrapa ${n} estrellas en total`,pwN:['Paraguas','Cohete','Escudo','Imán'],boss:'¡Jefe final!',bossName:'El Nubarrón',bossWin:'¡Venciste al Nubarrón!',bossHint:'Atrapa una estrella y golpéalo desde abajo',zone:'Zona',worn:'Puesto',use:'Usar',missing:n=>`Te faltan ${n} estrellas`,mute:'Silenciar',unmute:'Activar sonido',canvas:'Juego: borrego que salta hacia el cielo',lang:'Idioma',
+    zones:['Pradera','Cielo alto','Atardecer','Noche','Espacio','Nebulosa','Galaxia'],skinN:['Clásico','Oveja negra','Algodón','Vaquero','Rey','Arcoíris','Astronauta','Dorado','Médico','Chef','Pirata','Ninja','Abeja','Araña','Mago','Vampiro','Unicornio']},
+  en:{name:'English',tag:'the sheep who jumps to the sky',intro:'Bounce from cloud to cloud and climb as high as you can.',tipL:'Tap left',tipR:'Tap right',tipS:'Star = super jump',warn:'Seven zones, power-ups and a final boss. You can land on birds and bats. Not on meteors.',play:'Jump!',skins:'Costumes',best:'Best',yourStars:'Your stars',fall:'It fell!',ouch:'Ouch!',wow:'What a height!',reached:'You reached: ',newRec:'New record',starsLbl:'Stars',points:'Points',earned:'You earned',have:'you have',again:'Play again',shopHint:'Earn stars by catching them in the sky, plus one for every 100 m you climb.',done:'Done',revive:'Revive',double:'×2 stars',watch:'Watch an ad',privacy:'Privacy',adFail:'The ad didn’t load. Try again in a moment.',sens:'Sensitivity',sLow:'Low',sNormal:'Normal',sHigh:'High',ctrl:'Controls',mDrag:'Slide',mTap:'Tap sides',tipDrag:'Slide your finger left and right',missions:'Missions',claim:'Claim',mFresh:'New missions every day',mDone:'Mission complete!',world:'World rankings',lbFail:'Couldn’t open the rankings.',m_height:n=>`Reach ${n} m in one run`,m_runStars:n=>`Catch ${n} stars in one run`,m_stomp:n=>`Stomp ${n} enemies`,m_power:n=>`Use ${n} power-ups`,m_play:n=>`Play ${n} games`,m_zone:z=>`Reach the ${z} zone`,m_dayStars:n=>`Catch ${n} stars in total`,pwN:['Umbrella','Rocket','Shield','Magnet'],boss:'Final boss!',bossName:'The Stormcloud',bossWin:'You beat the Stormcloud!',bossHint:'Grab a star and hit it from below',zone:'Zone',worn:'Wearing',use:'Use',missing:n=>`You need ${n} more stars`,mute:'Mute',unmute:'Turn sound on',canvas:'Game: a sheep jumping up to the sky',lang:'Language',
+    zones:['Meadow','High Sky','Sunset','Night','Space','Nebula','Galaxy'],skinN:['Classic','Black Sheep','Cotton Candy','Cowboy','King','Rainbow','Astronaut','Golden','Doctor','Chef','Pirate','Ninja','Bee','Spider','Wizard','Vampire','Unicorn']},
+  pt:{name:'Português',tag:'a ovelhinha que pula até o céu',intro:'Pule de nuvem em nuvem e suba o mais alto que puder.',tipL:'Toque à esquerda',tipR:'Toque à direita',tipS:'Estrela = superpulo',warn:'Sete zonas, poderes e um chefão final. Você pode cair em cima dos pássaros e morcegos. Dos meteoros, não.',play:'Pular!',skins:'Fantasias',best:'Recorde',yourStars:'Suas estrelas',fall:'Caiu!',ouch:'Ai!',wow:'Que altura!',reached:'Você chegou a: ',newRec:'Novo recorde',starsLbl:'Estrelas',points:'Pontos',earned:'Ganhou',have:'você tem',again:'De novo',shopHint:'Ganhe estrelas pegando-as no céu, e mais uma a cada 100 m que subir.',done:'Pronto',revive:'Reviver',double:'×2 estrelas',watch:'Ver anúncio',privacy:'Privacidade',adFail:'O anúncio não carregou. Tente de novo daqui a pouco.',sens:'Sensibilidade',sLow:'Baixa',sNormal:'Normal',sHigh:'Alta',ctrl:'Controle',mDrag:'Deslizar',mTap:'Tocar lados',tipDrag:'Deslize o dedo para os lados',missions:'Missões',claim:'Pegar',mFresh:'Novas missões todo dia',mDone:'Missão cumprida!',world:'Recordes mundiais',lbFail:'Não foi possível abrir os recordes.',m_height:n=>`Chegue a ${n} m em uma partida`,m_runStars:n=>`Pegue ${n} estrelas em uma partida`,m_stomp:n=>`Pise em ${n} inimigos`,m_power:n=>`Use ${n} poderes`,m_play:n=>`Jogue ${n} partidas`,m_zone:z=>`Chegue à zona ${z}`,m_dayStars:n=>`Pegue ${n} estrelas no total`,pwN:['Guarda-chuva','Foguete','Escudo','Ímã'],boss:'Chefão final!',bossName:'O Nuvemzão',bossWin:'Você venceu o Nuvemzão!',bossHint:'Pegue uma estrela e acerte ele por baixo',zone:'Zona',worn:'Usando',use:'Usar',missing:n=>`Faltam ${n} estrelas`,mute:'Silenciar',unmute:'Ativar som',canvas:'Jogo: ovelhinha pulando até o céu',lang:'Idioma',
+    zones:['Campo','Céu alto','Pôr do sol','Noite','Espaço','Nebulosa','Galáxia'],skinN:['Clássica','Ovelha negra','Algodão-doce','Caubói','Rei','Arco-íris','Astronauta','Dourada','Médico','Chef','Pirata','Ninja','Abelha','Aranha','Mago','Vampiro','Unicórnio']},
+  fr:{name:'Français',tag:'le mouton qui saute jusqu’au ciel',intro:'Rebondis de nuage en nuage et monte le plus haut possible.',tipL:'Touche à gauche',tipR:'Touche à droite',tipS:'Étoile = super saut',warn:'Sept zones, des pouvoirs et un boss final. Tu peux sauter sur les oiseaux et les chauves-souris. Pas sur les météorites.',play:'On saute !',skins:'Costumes',best:'Record',yourStars:'Tes étoiles',fall:'Il est tombé !',ouch:'Aïe !',wow:'Quelle hauteur !',reached:'Tu as atteint : ',newRec:'Nouveau record',starsLbl:'Étoiles',points:'Points',earned:'Gagné',have:'tu as',again:'Rejouer',shopHint:'Gagne des étoiles en les attrapant dans le ciel, plus une tous les 100 m.',done:'OK',revive:'Revivre',double:'×2 étoiles',watch:'Voir une pub',privacy:'Confidentialité',adFail:'La pub n’a pas chargé. Réessaie dans un instant.',sens:'Sensibilité',sLow:'Basse',sNormal:'Normale',sHigh:'Haute',ctrl:'Contrôles',mDrag:'Glisser',mTap:'Toucher les côtés',tipDrag:'Fais glisser ton doigt à gauche et à droite',missions:'Missions',claim:'Récupérer',mFresh:'Nouvelles missions chaque jour',mDone:'Mission accomplie !',world:'Classement mondial',lbFail:'Impossible d’ouvrir le classement.',m_height:n=>`Atteins ${n} m en une partie`,m_runStars:n=>`Attrape ${n} étoiles en une partie`,m_stomp:n=>`Écrase ${n} ennemis`,m_power:n=>`Utilise ${n} pouvoirs`,m_play:n=>`Joue ${n} parties`,m_zone:z=>`Atteins la zone ${z}`,m_dayStars:n=>`Attrape ${n} étoiles au total`,pwN:['Parapluie','Fusée','Bouclier','Aimant'],boss:'Boss final !',bossName:'Le Gros Nuage',bossWin:'Tu as battu le Gros Nuage !',bossHint:'Attrape une étoile et frappe-le par en dessous',zone:'Zone',worn:'Porté',use:'Mettre',missing:n=>`Il te manque ${n} étoiles`,mute:'Couper le son',unmute:'Activer le son',canvas:'Jeu : un mouton qui saute vers le ciel',lang:'Langue',
+    zones:['Prairie','Haut du ciel','Coucher de soleil','Nuit','Espace','Nébuleuse','Galaxie'],skinN:['Classique','Mouton noir','Barbe à papa','Cowboy','Roi','Arc-en-ciel','Astronaute','Doré','Docteur','Chef','Pirate','Ninja','Abeille','Araignée','Magicien','Vampire','Licorne']},
+  de:{name:'Deutsch',tag:'das Schaf, das in den Himmel springt',intro:'Hüpf von Wolke zu Wolke und komm so hoch wie möglich.',tipL:'Links tippen',tipR:'Rechts tippen',tipS:'Stern = Supersprung',warn:'Sieben Zonen, Kräfte und ein Endboss. Auf Vögel und Fledermäuse kannst du springen. Auf Meteore nicht.',play:'Los geht’s!',skins:'Kostüme',best:'Rekord',yourStars:'Deine Sterne',fall:'Abgestürzt!',ouch:'Autsch!',wow:'Was für eine Höhe!',reached:'Erreicht: ',newRec:'Neuer Rekord',starsLbl:'Sterne',points:'Punkte',earned:'Verdient',have:'du hast',again:'Nochmal',shopHint:'Fang Sterne am Himmel und bekomm einen extra für je 100 m Höhe.',done:'Fertig',revive:'Wiederbeleben',double:'×2 Sterne',watch:'Werbung ansehen',privacy:'Datenschutz',adFail:'Die Werbung hat nicht geladen. Versuch es gleich nochmal.',sens:'Empfindlichkeit',sLow:'Niedrig',sNormal:'Normal',sHigh:'Hoch',ctrl:'Steuerung',mDrag:'Wischen',mTap:'Seiten tippen',tipDrag:'Wisch mit dem Finger nach links und rechts',missions:'Missionen',claim:'Abholen',mFresh:'Jeden Tag neue Missionen',mDone:'Mission geschafft!',world:'Weltrangliste',lbFail:'Die Rangliste konnte nicht geöffnet werden.',m_height:n=>`Erreiche ${n} m in einer Runde`,m_runStars:n=>`Fang ${n} Sterne in einer Runde`,m_stomp:n=>`Spring auf ${n} Gegner`,m_power:n=>`Benutze ${n} Kräfte`,m_play:n=>`Spiel ${n} Runden`,m_zone:z=>`Erreiche die Zone ${z}`,m_dayStars:n=>`Fang insgesamt ${n} Sterne`,pwN:['Regenschirm','Rakete','Schild','Magnet'],boss:'Endboss!',bossName:'Die Gewitterwolke',bossWin:'Du hast die Gewitterwolke besiegt!',bossHint:'Schnapp dir einen Stern und triff sie von unten',zone:'Zone',worn:'An',use:'Anziehen',missing:n=>`Dir fehlen ${n} Sterne`,mute:'Ton aus',unmute:'Ton an',canvas:'Spiel: ein Schaf springt in den Himmel',lang:'Sprache',
+    zones:['Wiese','Hoher Himmel','Abendrot','Nacht','Weltraum','Sternnebel','Galaxie'],skinN:['Klassisch','Schwarzes Schaf','Zuckerwatte','Cowboy','König','Regenbogen','Astronaut','Golden','Arzt','Koch','Pirat','Ninja','Biene','Spinne','Zauberer','Vampir','Einhorn']},
+  it:{name:'Italiano',tag:'la pecorella che salta fino al cielo',intro:'Rimbalza di nuvola in nuvola e sali più in alto che puoi.',tipL:'Tocca a sinistra',tipR:'Tocca a destra',tipS:'Stella = super salto',warn:'Sette zone, poteri e un boss finale. Puoi saltare su uccelli e pipistrelli. Sui meteoriti no.',play:'Salta!',skins:'Costumi',best:'Record',yourStars:'Le tue stelle',fall:'È caduta!',ouch:'Ahi!',wow:'Che altezza!',reached:'Sei arrivato a: ',newRec:'Nuovo record',starsLbl:'Stelle',points:'Punti',earned:'Hai vinto',have:'ne hai',again:'Ancora',shopHint:'Guadagna stelle prendendole in cielo, più una ogni 100 m di salita.',done:'Fatto',revive:'Rinasci',double:'×2 stelle',watch:'Guarda la pubblicità',privacy:'Privacy',adFail:'La pubblicità non si è caricata. Riprova tra poco.',sens:'Sensibilità',sLow:'Bassa',sNormal:'Normale',sHigh:'Alta',ctrl:'Controlli',mDrag:'Scorri',mTap:'Tocca i lati',tipDrag:'Scorri il dito a destra e a sinistra',missions:'Missioni',claim:'Riscuoti',mFresh:'Nuove missioni ogni giorno',mDone:'Missione compiuta!',world:'Classifica mondiale',lbFail:'Impossibile aprire la classifica.',m_height:n=>`Arriva a ${n} m in una partita`,m_runStars:n=>`Prendi ${n} stelle in una partita`,m_stomp:n=>`Schiaccia ${n} nemici`,m_power:n=>`Usa ${n} poteri`,m_play:n=>`Gioca ${n} partite`,m_zone:z=>`Arriva alla zona ${z}`,m_dayStars:n=>`Prendi ${n} stelle in totale`,pwN:['Ombrello','Razzo','Scudo','Calamita'],boss:'Boss finale!',bossName:'Il Nuvolone',bossWin:'Hai sconfitto il Nuvolone!',bossHint:'Prendi una stella e colpiscilo da sotto',zone:'Zona',worn:'Indossato',use:'Usa',missing:n=>`Ti mancano ${n} stelle`,mute:'Disattiva audio',unmute:'Attiva audio',canvas:'Gioco: una pecorella che salta verso il cielo',lang:'Lingua',
+    zones:['Prato','Cielo alto','Tramonto','Notte','Spazio','Nebulosa','Galassia'],skinN:['Classica','Pecora nera','Zucchero filato','Cowboy','Re','Arcobaleno','Astronauta','Dorata','Dottore','Chef','Pirata','Ninja','Ape','Ragno','Mago','Vampiro','Unicorno']},
+  ja:{name:'日本語',tag:'空までジャンプするひつじ',intro:'雲から雲へはねて、できるだけ高くのぼろう。',tipL:'左をタップ',tipR:'右をタップ',tipS:'星 = スーパージャンプ',warn:'7つのゾーン、パワー、そしてラスボス。鳥とコウモリは踏めるけど、隕石はダメ。',play:'ジャンプ！',skins:'きせかえ',best:'ベスト',yourStars:'星の数',fall:'落ちちゃった！',ouch:'いたっ！',wow:'すごい高さ！',reached:'到達：',newRec:'新記録',starsLbl:'星',points:'ポイント',earned:'獲得',have:'所持',again:'もう一回',shopHint:'空で星をつかまえよう。100mのぼるごとに1つもらえるよ。',done:'OK',revive:'復活',double:'星×2',watch:'広告を見る',privacy:'プライバシー',adFail:'広告を読み込めませんでした。少し待ってからもう一度どうぞ。',sens:'感度',sLow:'低',sNormal:'中',sHigh:'高',ctrl:'操作',mDrag:'スライド',mTap:'左右タップ',tipDrag:'指を左右にスライド',missions:'ミッション',claim:'受け取る',mFresh:'ミッションは毎日新しくなるよ',mDone:'ミッション達成！',world:'世界ランキング',lbFail:'ランキングを開けませんでした。',m_height:n=>`1回で${n}mまでのぼる`,m_runStars:n=>`1回で星を${n}個とる`,m_stomp:n=>`敵を${n}回ふむ`,m_power:n=>`パワーを${n}回使う`,m_play:n=>`${n}回あそぶ`,m_zone:z=>`ゾーン「${z}」に着く`,m_dayStars:n=>`星を合計${n}個とる`,pwN:['かさ','ロケット','バリア','マグネット'],boss:'ラスボス！',bossName:'カミナリ雲',bossWin:'カミナリ雲をたおした！',bossHint:'星をとって下から体当たり！',zone:'ゾーン',worn:'着用中',use:'着る',missing:n=>`星があと${n}個必要`,mute:'ミュート',unmute:'サウンドON',canvas:'ゲーム：空へジャンプするひつじ',lang:'言語',
+    zones:['草原','高い空','夕焼け','夜','宇宙','星雲','銀河'],skinN:['クラシック','黒ひつじ','わたあめ','カウボーイ','王さま','にじいろ','宇宙飛行士','ゴールド','お医者さん','シェフ','海賊','忍者','ミツバチ','クモ','魔法使い','吸血鬼','ユニコーン']},
+  ko:{name:'한국어',tag:'하늘까지 점프하는 양',intro:'구름에서 구름으로 튕기며 최대한 높이 올라가세요.',tipL:'왼쪽 터치',tipR:'오른쪽 터치',tipS:'별 = 슈퍼 점프',warn:'일곱 구역, 파워, 그리고 마지막 보스. 새와 박쥐는 밟을 수 있지만 운석은 안 돼요.',play:'점프!',skins:'코스튬',best:'최고 기록',yourStars:'내 별',fall:'떨어졌어요!',ouch:'아야!',wow:'엄청 높아요!',reached:'도달: ',newRec:'새 기록',starsLbl:'별',points:'점수',earned:'획득',have:'보유',again:'다시 하기',shopHint:'하늘에서 별을 잡고, 100m 올라갈 때마다 별 1개를 더 받아요.',done:'완료',revive:'부활',double:'별 ×2',watch:'광고 보기',privacy:'개인정보',adFail:'광고를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.',sens:'감도',sLow:'낮음',sNormal:'보통',sHigh:'높음',ctrl:'조작',mDrag:'밀기',mTap:'좌우 터치',tipDrag:'손가락을 좌우로 밀어요',missions:'미션',claim:'받기',mFresh:'매일 새로운 미션',mDone:'미션 완료!',world:'세계 랭킹',lbFail:'랭킹을 열 수 없어요.',m_height:n=>`한 판에 ${n}m 올라가기`,m_runStars:n=>`한 판에 별 ${n}개 잡기`,m_stomp:n=>`적 ${n}마리 밟기`,m_power:n=>`파워 ${n}번 쓰기`,m_play:n=>`${n}판 플레이하기`,m_zone:z=>`'${z}' 구역 도착하기`,m_dayStars:n=>`별 총 ${n}개 잡기`,pwN:['우산','로켓','보호막','자석'],boss:'최종 보스!',bossName:'먹구름 대왕',bossWin:'먹구름 대왕을 물리쳤어요!',bossHint:'별을 잡고 아래에서 들이받아요',zone:'구역',worn:'착용 중',use:'착용',missing:n=>`별이 ${n}개 더 필요해요`,mute:'음소거',unmute:'소리 켜기',canvas:'게임: 하늘로 점프하는 양',lang:'언어',
+    zones:['초원','높은 하늘','노을','밤','우주','성운','은하'],skinN:['클래식','검은 양','솜사탕','카우보이','왕','무지개','우주비행사','황금','의사','셰프','해적','닌자','꿀벌','거미','마법사','뱀파이어','유니콘']},
 };
 function detectLang(){
   const saved=load('borrego_lang',null); if(saved&&LANGS[saved])return saved;
@@ -244,6 +277,8 @@ const ZONES=[
   {m:1000,n:'Atardecer'},
   {m:2000,n:'Noche'},
   {m:3200,n:'Espacio'},
+  {m:3900,n:'Nebulosa'},
+  {m:4500,n:'Galaxia'},
 ];
 const zoneAt=m=>{let z=0;for(let i=0;i<ZONES.length;i++)if(m>=ZONES[i].m)z=i;return z};
 
@@ -272,16 +307,17 @@ const sfx={
 // música: secuenciador de 32 pasos que cambia de tono y velocidad por zona
 const MEL=[0,4,7,12,9,7,4,7, 5,9,12,9,7,-99,4,-99, 0,4,7,12,14,12,9,7, 5,4,2,4,0,-99,-99,-99];
 const BASS=[0,0,5,5,0,0,7,7];
-const ZROOT=[0,2,5,-3,-1], ZBPM=[132,140,146,120,150], ZMINOR=[0,0,0,1,1];
+const ZROOT=[0,2,5,-3,-1,1,3,-2], ZBPM=[132,140,146,120,150,156,162,176], ZMINOR=[0,0,0,1,1,1,1,1];
+const mz=()=>(boss&&boss.on)?7:zone; // la música cambia en la pelea con el jefe
 let musicOn=false, mStep=0, mNext=0, mTimer=null, zone=0;
 function mf(semi){return 392*2**(semi/12)}
 function schedule(){
   if(!musicOn||!ac||muted)return;
-  const spb=60/ZBPM[zone]/2;
+  const spb=60/ZBPM[mz()]/2;
   while(mNext<ac.currentTime+.2){
     let n=MEL[mStep];
-    if(n>-50){ if(ZMINOR[zone]){if(n%12===4)n-=1;if(n%12===9)n-=1} tone(mf(n+ZROOT[zone]),mf(n+ZROOT[zone]),spb*.9,'square',.028,mNext)}
-    if(mStep%4===0){const b=BASS[mStep>>2];tone(mf(b+ZROOT[zone]-24),mf(b+ZROOT[zone]-24),spb*3.5,'triangle',.07,mNext)}
+    if(n>-50){ if(ZMINOR[mz()]){if(n%12===4)n-=1;if(n%12===9)n-=1} tone(mf(n+ZROOT[mz()]),mf(n+ZROOT[mz()]),spb*.9,'square',.028,mNext)}
+    if(mStep%4===0){const b=BASS[mStep>>2];tone(mf(b+ZROOT[mz()]-24),mf(b+ZROOT[mz()]-24),spb*3.5,'triangle',.07,mNext)}
     if(mStep%2===1)tone(1800,1200,.03,'square',.008,mNext);
     mNext+=spb;mStep=(mStep+1)%32;
   }
@@ -313,6 +349,11 @@ document.addEventListener('visibilitychange',()=>{
 
 /* ---------- estado ---------- */
 let state='menu', sheep, plats, stars, foes, parts, camY, maxH, bonus, starsN, genY, time=0, shake=0, meteorT=3, last=performance.now();
+let pups=[], power=null, run={stars:0,stomps:0,powers:0}, boss={on:false,done:false};
+const BOSS_M=5000;
+/* poderes: duración en segundos (el escudo dura hasta que te protege una vez) */
+const POWERS={umbrella:{dur:9},rocket:{dur:2.6},shield:{dur:Infinity},magnet:{dur:10}};
+const PW_ORDER=['umbrella','rocket','shield','magnet'];
 const keys={l:0,r:0}, ptrs=new Map();
 
 function reset(){
@@ -321,11 +362,13 @@ function reset(){
   stars=[];foes=[];parts=[];
   camY=-H*0.72; maxH=0; bonus=0; starsN=0; genY=0; shake=0; zone=0; meteorT=3;
   revived=false; doubled=false; lastEarned=0; invuln=0;
+  pups=[]; power=null; run={stars:0,stomps:0,powers:0}; boss={on:false,done:false};
   gen();
 }
 function rnd(a,b){return a+Math.random()*(b-a)}
 
 function gen(){
+  if(boss.on)return;
   while(genY>camY-H*0.5){
     const m=-genY/PX_PER_M;
     const gap=rnd(58,88+Math.min(80,m*0.06));        // salto máximo ≈ 184 px
@@ -340,6 +383,9 @@ function gen(){
     }
     if(m>25&&type==='n'&&Math.random()<.085){
       stars.push({x:p.x+p.w/2,y:p.y-30,ph:Math.random()*6,got:false});
+    }else if(m>80&&type==='n'&&Math.random()<.04){
+      const r=Math.random(), kind=r<.3?'umbrella':r<.6?'magnet':r<.85?'shield':'rocket';
+      pups.push({x:p.x+p.w/2,y:p.y-30,kind,ph:Math.random()*6,got:false});
     }
     const d=Math.random()<.5?-1:1;
     // pájaros: cielo alto y atardecer
@@ -355,6 +401,158 @@ function gen(){
 }
 
 function puff(x,y,n,col){for(let i=0;i<n;i++)parts.push({x,y,vx:rnd(-90,90),vy:rnd(-60,40),r:rnd(3,7),life:1,col})}
+
+const Cap=window.Capacitor;
+/* ---------- daño (con escudo, cohete y ratito invencible) ---------- */
+function hurt(){
+  if(sheep.dead||invuln>0)return false;
+  if(power&&power.kind==='rocket')return false;
+  if(power&&power.kind==='shield'){power=null;invuln=1.2;sfx.stomp();puff(sheep.x,sheep.y-20,18,'#7fd8ff');return false}
+  sheep.dead=true;shake=.35;sfx.hit();return true;
+}
+function givePower(kind){
+  power={kind,t:POWERS[kind].dur,max:POWERS[kind].dur};
+  run.powers++;missionEvent('power',1);sfx.buy();
+  if(kind==='rocket'){sheep.vy=-1150}
+}
+
+/* ---------- jefe final: El Nubarrón ---------- */
+function startBoss(){
+  boss={on:true,done:false,hp:5,max:5,t:0,x:W/2,y:0,hitT:0,atkT:2.2,bolts:[],hail:[],starT:1.2,camY:camY};
+  foes=[];pups=[];stars=[];
+  if(power&&power.kind==='rocket')power=null;
+  // arena: filas fijas de nubes; la de abajo es ancha para no caerse al empezar
+  plats=plats.filter(p=>p.y>camY+H+40);
+  let row=0;
+  for(let y=camY+H-60;y>=camY+370;y-=90,row++){
+    if(row===0){plats.push({x:20,y,w:W-40,type:'n',ph:0});continue}
+    const w=84;
+    plats.push({x:rnd(4,W/2-w-6),y,w,type:'n',ph:Math.random()*9});
+    plats.push({x:rnd(W/2+6,W-w-4),y,w,type:'n',ph:Math.random()*9});
+  }
+  showBossBanner(t('boss'),t('bossName'));
+  setTimeout(()=>{if(boss.on)toast(t('bossHint'))},2600);
+}
+function bossStar(){
+  const rows=plats.filter(p=>!p.broken&&p.y>camY+440&&p.y<camY+H-40);
+  if(!rows.length)return;
+  const p=rows[(Math.random()*rows.length)|0];
+  stars.push({x:p.x+p.w/2,y:p.y-30,ph:0,got:false,boss:true});
+}
+function bossUpdate(dt,cx,cy){
+  const b=boss;b.t+=dt;b.hitT=Math.max(0,b.hitT-dt);
+  b.x=W/2+Math.sin(b.t*.8)*(W/2-80);b.y=camY+128+Math.sin(b.t*1.7)*8;
+  // estrellas para poder golpearlo
+  if(!stars.some(s=>!s.got)){b.starT-=dt;if(b.starT<=0){bossStar();b.starT=1.4}}
+  // ataques
+  b.atkT-=dt;
+  if(b.atkT<=0){
+    b.atkT=rnd(1.5,2.4)*(.55+b.hp*.09);
+    if(Math.random()<.55)b.bolts.push({x:Math.max(20,Math.min(W-20,cx+rnd(-20,20))),warn:.9,strike:.35});
+    else for(let i=0;i<4;i++)b.hail.push({x:b.x+rnd(-40,40),y:b.y+30,vx:rnd(-110,110),vy:rnd(-80,20)});
+  }
+  for(const z of b.bolts){
+    if(z.warn>0){z.warn-=dt;if(z.warn<=0){sfx.hit();shake=.2}continue}
+    z.strike-=dt;
+    if(!sheep.dead&&Math.abs(cx-z.x)<17&&cy>b.y)hurt();
+  }
+  b.bolts=b.bolts.filter(z=>z.strike>0);
+  for(const h of b.hail){
+    h.vy+=600*dt;h.x+=h.vx*dt;h.y+=h.vy*dt;
+    if(!sheep.dead&&Math.hypot(h.x-cx,h.y-cy)<20){h.y=1e9;hurt()}
+  }
+  b.hail=b.hail.filter(h=>h.y<camY+H+60);
+  // choque con el jefe
+  if(!sheep.dead&&Math.abs(cx-b.x)<70&&Math.abs(cy-b.y)<44){
+    if(sheep.charged&&sheep.vy<0&&b.hitT<=0){
+      b.hp--;b.hitT=.7;sheep.vy=320;sheep.charged=false;invuln=.6;shake=.4;sfx.stomp();bonus+=300;
+      puff(cx,cy-10,22,'#ffd23f');
+      if(b.hp<=0)bossDefeated();
+    }else if(cy>b.y){sheep.vy=Math.max(sheep.vy,240)}
+  }
+}
+function bossDefeated(){
+  boss.on=false;boss.done=true;
+  for(let i=0;i<5;i++)puff(boss.x+rnd(-60,60),boss.y+rnd(-30,30),14,i%2?'#ffd23f':'#cfd3ea');
+  starsN+=25;run.stars+=25;bonus+=2000;sfx.zone();shake=.6;
+  missionEvent('dayStars',25);
+  genY=Math.min(...plats.map(p=>p.y));
+  stars=stars.filter(s=>!s.boss);
+  showBossBanner('★ +25',t('bossWin'));
+}
+function showBossBanner(small,big){
+  const b=$('banner');$('banZ').textContent=small;$('banN').textContent=big;
+  b.hidden=true;void b.offsetWidth;b.hidden=false;
+  clearTimeout(showBanner.t);showBanner.t=setTimeout(()=>b.hidden=true,2400);
+}
+
+/* ---------- misiones diarias ---------- */
+const MT=[
+  {id:'height',  run:true, ns:[300,600,1000,1500,2200],rw:[10,15,20,25,30]},
+  {id:'runStars',run:true, ns:[3,5,8],rw:[10,15,25]},
+  {id:'zone',    run:true, ns:[2,3,4],rw:[15,20,30]},
+  {id:'stomp',   run:false,ns:[3,6,10],rw:[10,15,25]},
+  {id:'power',   run:false,ns:[2,4,6],rw:[10,15,20]},
+  {id:'play',    run:false,ns:[3,5,8],rw:[10,15,20]},
+  {id:'dayStars',run:false,ns:[10,20,30],rw:[10,15,25]},
+];
+function today(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+function seeded(str){let h=2166136261;for(const c of str){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return()=>{h^=h<<13;h^=h>>>17;h^=h<<5;return((h>>>0)%10000)/10000}}
+let mis=null;
+function missions(){
+  const d=today();
+  if(mis&&mis.date===d)return mis;
+  const saved=load('borrego_missions',null);
+  if(saved&&saved.date===d){mis=saved;return mis}
+  const r=seeded('wooly'+d), pool=[...MT], list=[];
+  while(list.length<3){const i=(r()*pool.length)|0;const m=pool.splice(i,1)[0];const k=(r()*m.ns.length)|0;list.push({id:m.id,n:m.ns[k],rw:m.rw[k],p:0,c:false,told:false})}
+  mis={date:d,list};save('borrego_missions',mis);return mis;
+}
+function missionEvent(id,v){
+  const M=missions();let changed=false;
+  for(const m of M.list){
+    if(m.id!==id||m.c)continue;
+    const def=MT.find(x=>x.id===id);
+    const np=def.run?Math.max(m.p,v):m.p+v;
+    if(np!==m.p){m.p=Math.min(np,m.n);changed=true}
+    if(m.p>=m.n&&!m.told){m.told=true;toast('✓ '+t('mDone'));sfx.buy();save('borrego_missions',M)}
+  }
+  if(changed&&id!=='height')save('borrego_missions',M);
+  updateDots();
+}
+function missionText(m){
+  const f=t('m_'+m.id);
+  return m.id==='zone'?f(t('zones')[m.n]):f(m.n);
+}
+function updateDots(){
+  const any=missions().list.some(m=>m.p>=m.n&&!m.c);
+  document.querySelectorAll('.hasdot .dot').forEach(d=>d.hidden=!any);
+}
+function buildMissions(){
+  const box=$('mlist');box.innerHTML='';
+  for(const m of missions().list){
+    const row=document.createElement('div');row.className='mrow'+(m.c?' done':'');
+    const tx=document.createElement('b');tx.textContent=missionText(m);
+    const bar=document.createElement('div');bar.className='bar';const fill=document.createElement('i');fill.style.width=Math.round(100*Math.min(1,m.p/m.n))+'%';bar.append(fill);
+    const sm=document.createElement('small');sm.textContent=(m.id==='zone'?(m.p>=m.n?1:0)+' / 1':Math.floor(m.p)+' / '+m.n);
+    const bt=document.createElement('button');
+    if(m.c){bt.textContent='✓';bt.className='ok';bt.disabled=true}
+    else if(m.p>=m.n){bt.textContent=t('claim')+' ★'+m.rw;bt.addEventListener('click',()=>{m.c=true;wallet+=m.rw;save('borrego_wallet',wallet);save('borrego_missions',mis);sfx.buy();refreshWallet();buildMissions();updateDots()})}
+    else{bt.textContent='★ '+m.rw;bt.disabled=true}
+    row.append(tx,bt,bar,sm);box.append(row);
+  }
+}
+let misFrom='menu';
+function openMissions(from){misFrom=from;buildMissions();show('mis')}
+
+/* ---------- aviso corto ---------- */
+function toast(msg){const el=$('toast');el.textContent=msg;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,2200)}
+
+/* ---------- récords mundiales (Google Play Juegos, solo en la app) ---------- */
+const LB=(Cap&&Cap.isNativePlatform&&Cap.isNativePlatform())?((Cap.Plugins&&Cap.Plugins.Leaderboard)||(Cap.registerPlugin&&Cap.registerPlugin('Leaderboard'))):null;
+let lbOn=false;
+if(LB){try{LB.available().then(r=>{lbOn=!!(r&&r.available);document.querySelectorAll('.lbBtn').forEach(b=>b.hidden=!lbOn)}).catch(()=>{})}catch(e){}}
+document.querySelectorAll('.lbBtn').forEach(b=>b.addEventListener('click',()=>{if(!LB)return;LB.show().catch(()=>toast(t('lbFail')))}));
 
 /* ---------- entrada ---------- */
 const gameEl=$('game');
@@ -374,7 +572,7 @@ addEventListener('keydown',e=>{if(kmap[e.key]){keys[kmap[e.key]]=1;e.preventDefa
 addEventListener('keyup',e=>{if(kmap[e.key])keys[kmap[e.key]]=0});
 gameEl.addEventListener('contextmenu',e=>e.preventDefault());
 
-function show(id){['menu','over','shop'].forEach(s=>$(s).hidden=s!==id);$('hud').hidden=id!==null}
+function show(id){['menu','over','shop','mis'].forEach(s=>$(s).hidden=s!==id);$('hud').hidden=id!==null}
 function refreshWallet(){document.querySelectorAll('.walletTxt').forEach(e=>e.textContent=wallet);$('best0').textContent=best+' m'}
 
 /* ---------- anuncios (solo funcionan dentro de la app de Android) ---------- */
@@ -385,7 +583,6 @@ const ADS={
   interstitialEvery:3,  // un anuncio de pantalla completa cada 3 partidas
   minGapSec:120,        // y nunca más seguido que cada 2 minutos
 };
-const Cap=window.Capacitor;
 const AdMob=(Cap&&Cap.isNativePlatform&&Cap.isNativePlatform()&&Cap.Plugins&&Cap.Plugins.AdMob)||window.__fakeAdMob||null;
 let adsOk=false, rewardedReady=false, interReady=false, runsSinceInter=0, lastFullAd=Date.now(), adBusy=false;
 async function adsInit(){
@@ -458,6 +655,7 @@ $('adRevive').addEventListener('click',async()=>{
   plats.push({x:W/2-70,y:rescueY,w:140,type:'n',ph:0});
   sheep.dead=false;sheep.x=W/2;sheep.vx=0;sheep.y=rescueY;sheep.vy=-BOOST;sheep.sq=.6;invuln=2.5;dragId=null;
   foes=foes.filter(f=>f.kind!=='meteor'&&Math.abs(f.y-(camY+H*.5))>H*.6);
+  if(boss.on){boss.bolts=[];boss.hail=[];boss.atkT=2.5}
   puff(sheep.x,sheep.y,16,'#ffd23f');sfx.star();startMusic();
 });
 $('adDouble').addEventListener('click',async()=>{
@@ -472,7 +670,7 @@ $('privacyBtn').addEventListener('click',()=>{try{AdMob&&AdMob.showPrivacyOption
 function start(){
   reset(); state='play'; show(null); $('hud').hidden=false;
   $('zoneName').textContent=t('zones')[0];
-  sfx.baa(); startMusic();
+  sfx.baa(); startMusic(); missionEvent('play',1); $('toast').hidden=true;
 }
 $('play').addEventListener('click',start);
 $('again').addEventListener('click',async()=>{if(adBusy)return;await maybeInterstitial();start()});
@@ -482,6 +680,9 @@ function openShop(from){shopFrom=from;state=from==='menu'?'menu':'over';buildSho
 $('shopBtn1').addEventListener('click',()=>openShop('menu'));
 $('shopBtn2').addEventListener('click',()=>openShop('over'));
 $('shopBack').addEventListener('click',()=>{show(shopFrom);refreshWallet()});
+$('misBtn1').addEventListener('click',()=>openMissions('menu'));
+$('misBtn2').addEventListener('click',()=>openMissions('over'));
+$('misBack').addEventListener('click',()=>{show(misFrom);refreshWallet()});
 
 function end(){
   state='over'; stopMusic();
@@ -489,6 +690,8 @@ function end(){
   const earned=starsN+Math.floor(m/100);
   wallet+=earned; save('borrego_wallet',wallet); lastEarned=earned;
   const rec=m>best; if(rec){best=m;save('borrego_best',best)}
+  if(lbOn&&m>0){try{LB.submit({score:m}).catch(()=>{})}catch(e){}}
+  save('borrego_missions',missions());updateDots();
   $('fh').innerHTML=m+'<small> m</small>';
   $('fz').textContent=t('reached')+t('zones')[zoneAt(m)];
   $('fs').textContent=starsN; $('fp').textContent=pts; $('fb').textContent=best+' m';
@@ -555,7 +758,14 @@ function update(dt){
   sheep.x+=sheep.vx*dt;
   if(sheep.x<-22)sheep.x+=W+44; else if(sheep.x>W+22)sheep.x-=W+44;
   const prevY=sheep.y;
-  sheep.vy+=G*dt; sheep.y+=sheep.vy*dt;
+  sheep.vy+=G*dt;
+  if(power){
+    power.t-=dt;
+    if(power.kind==='rocket'){sheep.vy=-1150;if(Math.random()<.9)parts.push({x:sheep.x-sheep.face*6+rnd(-4,4),y:sheep.y,vx:rnd(-30,30),vy:rnd(120,220),r:rnd(3,6),life:.6,col:Math.random()<.5?'#ffb13b':'#ff6a3d'})}
+    if(power.kind==='umbrella'&&sheep.vy>130)sheep.vy=130;
+    if(power.t<=0){if(power.kind==='rocket'){sheep.vy=-650;invuln=Math.max(invuln,1)}power=null}
+  }
+  sheep.y+=sheep.vy*dt;
   sheep.sq+=(1-sheep.sq)*Math.min(1,dt*10);
   sheep.blink=(time%3.2)<.12;
   invuln=Math.max(0,invuln-dt);
@@ -570,7 +780,7 @@ function update(dt){
       if(p.broken)continue;
       if(prevY<=p.y+2&&sheep.y>=p.y&&sheep.x+13>p.x&&sheep.x-13<p.x+p.w){
         if(p.type==='f'){p.broken=true;sfx.crack();puff(sheep.x,p.y,8,'#9aa3b8');continue}
-        sheep.y=p.y;sheep.vy=-JUMP;sheep.sq=.68;sfx.jump();puff(sheep.x,p.y,5,'#ffffff');
+        sheep.y=p.y;sheep.vy=-JUMP;sheep.sq=.68;sheep.charged=false;sfx.jump();puff(sheep.x,p.y,5,'#ffffff');
         break;
       }
     }
@@ -580,12 +790,21 @@ function update(dt){
   for(const s of stars){
     s.ph+=dt*3;
     if(!s.got&&!sheep.dead&&Math.hypot(s.x-cx,s.y-cy)<30){
-      s.got=true;starsN++;bonus+=50;sheep.vy=-BOOST;sheep.sq=.6;sfx.star();puff(s.x,s.y,14,'#ffd23f');
+      s.got=true;starsN++;bonus+=50;sheep.vy=-BOOST;sheep.sq=.6;sheep.charged=true;sfx.star();puff(s.x,s.y,14,'#ffd23f');
+      run.stars++;missionEvent('runStars',run.stars);missionEvent('dayStars',1);
     }
   }
 
+  if(power&&power.kind==='magnet'){
+    for(const s of stars){if(s.got)continue;const dx=cx-s.x,dy=cy-s.y,d=Math.hypot(dx,dy);if(d<190){s.x+=dx*Math.min(1,dt*5);s.y+=dy*Math.min(1,dt*5)}}
+  }
+  for(const u of pups){
+    u.ph+=dt*3;
+    if(!u.got&&!sheep.dead&&!(power&&power.kind==='rocket')&&Math.hypot(u.x-cx,u.y-cy)<30){u.got=true;givePower(u.kind);puff(u.x,u.y,12,'#ffffff')}
+  }
+  if(boss.on)bossUpdate(dt,cx,cy);
   // meteoritos en el espacio
-  if(zone>=4){
+  if(zone>=4&&!boss.on){
     meteorT-=dt;
     if(meteorT<=0){
       meteorT=rnd(1.6,3.6)-Math.min(1,(mNow-3200)/4000);
@@ -600,14 +819,15 @@ function update(dt){
       if(b.warn>0){b.warn-=dt;b.y=camY-60;continue}
       b.vy=Math.min(520,b.vy+900*dt);b.x+=b.vx*dt;b.y+=b.vy*dt;
       if(Math.random()<.6)parts.push({x:b.x+rnd(-6,6),y:b.y-10,vx:rnd(-20,20),vy:-40,r:rnd(3,6),life:.7,col:Math.random()<.5?'#ffb13b':'#ff6a3d'});
-      if(!sheep.dead&&invuln<=0&&Math.hypot(b.x-cx,b.y-cy)<26){sheep.dead=true;sheep.vy=Math.max(sheep.vy,-100);shake=.4;sfx.hit();puff(cx,cy,14,'#ff8a3d')}
+      if(!sheep.dead&&Math.hypot(b.x-cx,b.y-cy)<26){if(hurt()){sheep.vy=Math.max(sheep.vy,-100);puff(cx,cy,14,'#ff8a3d')}else if(invuln<=.6||(power&&power.kind==='rocket')){b.dead=true;b.vy=-200}}
       continue;
     }
     b.x+=b.vx*dt; if(b.x<-30)b.x=W+30; if(b.x>W+30)b.x=-30;
     if(b.kind==='bat')b.y=b.y0+Math.sin(b.ph*.22)*34;
     if(!sheep.dead&&Math.abs(b.x-cx)<26&&Math.abs(b.y-cy)<24){
-      if(sheep.vy>0&&cy<b.y-4){b.dead=true;b.vy=-200;bonus+=100;sheep.vy=-JUMP*1.1;sheep.sq=.65;sfx.stomp();puff(b.x,b.y,10,b.kind==='bat'?'#5a3f7a':'#5b607f')}
-      else if(invuln<=0){sheep.dead=true;sheep.vy=Math.max(sheep.vy,-150);sheep.vx=b.vx*.5;shake=.35;sfx.hit()}
+      if(power&&power.kind==='rocket'){b.dead=true;b.vy=-300;bonus+=100;run.stomps++;missionEvent('stomp',1);sfx.stomp()}
+      else if(sheep.vy>0&&cy<b.y-4){b.dead=true;b.vy=-200;bonus+=100;sheep.vy=-JUMP*1.1;sheep.sq=.65;sfx.stomp();puff(b.x,b.y,10,b.kind==='bat'?'#5a3f7a':'#5b607f');run.stomps++;missionEvent('stomp',1)}
+      else if(hurt()){sheep.vy=Math.max(sheep.vy,-150);sheep.vx=b.vx*.5}
     }
   }
   for(const q of parts){q.x+=q.vx*dt;q.y+=q.vy*dt;q.vy+=200*dt;q.life-=dt*1.8}
@@ -615,14 +835,17 @@ function update(dt){
 
   if(!sheep.dead)maxH=Math.max(maxH,-sheep.y);
   const z=zoneAt(maxH/PX_PER_M);
-  if(z>zone){zone=z;showBanner(z);sfx.zone();$('zoneName').textContent=t('zones')[z];$('hud').classList.toggle('dark',z>=3)}
+  if(z>zone){zone=z;showBanner(z);sfx.zone();$('zoneName').textContent=t('zones')[z];$('hud').classList.toggle('dark',z>=3);missionEvent('zone',z)}
+  missionEvent('height',Math.floor(maxH/PX_PER_M));
+  if(!boss.on&&!boss.done&&maxH/PX_PER_M>=BOSS_M)startBoss();
   const target=sheep.y-H*0.42;
-  if(target<camY)camY=target;
+  if(!boss.on&&target<camY)camY=target;
   shake=Math.max(0,shake-dt);
   gen();
   const cut=camY+H+120;
   plats=plats.filter(p=>p.y<cut&&(p.a??1)>0);
   stars=stars.filter(s=>s.y<cut);
+  pups=pups.filter(u=>u.y<cut&&!u.got);
   foes=foes.filter(b=>b.y<cut);
 
   $('h').textContent=Math.floor(maxH/PX_PER_M)+' m';
@@ -637,6 +860,9 @@ const skyStops=[ // [metros, arriba, abajo]
   [1300,[120,95,190],[250,170,150]],
   [2200,[35,35,90], [90,70,140]],
   [3400,[8,8,30],   [26,22,64]],
+  [3950,[58,20,92], [168,58,136]],
+  [4550,[12,26,70], [62,26,104]],
+  [5200,[6,6,22],   [40,12,60]],
 ];
 function lerp(a,b,t){return a+(b-a)*t}
 function skyAt(m){
@@ -849,6 +1075,117 @@ function drawSheep(g,sh,sk,sc=1){
   g.restore();
 }
 
+function drawPup(u){
+  const y=u.y+Math.sin(u.ph)*4;
+  ctx.save();ctx.translate(u.x,y);
+  ctx.fillStyle='rgba(255,255,255,.55)';ctx.strokeStyle='rgba(255,255,255,.95)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(0,0,16,0,7);ctx.fill();ctx.stroke();
+  drawPowerIcon(ctx,u.kind,0,0,1);
+  ctx.restore();
+}
+function drawPowerIcon(g,kind,x,y,s){
+  g.save();g.translate(x,y);g.scale(s,s);
+  if(kind==='umbrella'){
+    g.fillStyle='#ff6b8a';g.beginPath();g.arc(0,1,11,Math.PI,0);g.closePath();g.fill();
+    g.strokeStyle='#5a3a1a';g.lineWidth=2;g.beginPath();g.moveTo(0,1);g.lineTo(0,10);g.arc(-3,10,3,0,Math.PI);g.stroke();
+  }else if(kind==='rocket'){
+    g.rotate(-.6);g.fillStyle='#e9eef7';g.beginPath();g.moveTo(0,-12);g.quadraticCurveTo(7,-4,5,8);g.lineTo(-5,8);g.quadraticCurveTo(-7,-4,0,-12);g.fill();
+    g.fillStyle='#e04848';g.beginPath();g.moveTo(-5,3);g.lineTo(-9,10);g.lineTo(-4,8);g.moveTo(5,3);g.lineTo(9,10);g.lineTo(4,8);g.fill();
+    g.fillStyle='#7fd8ff';g.beginPath();g.arc(0,-3,2.6,0,7);g.fill();
+    g.fillStyle='#ffb13b';g.beginPath();g.moveTo(-3,8);g.lineTo(0,14);g.lineTo(3,8);g.fill();
+  }else if(kind==='shield'){
+    g.fillStyle='#4aa3ff';g.beginPath();g.moveTo(0,-11);g.lineTo(9,-7);g.quadraticCurveTo(9,6,0,11);g.quadraticCurveTo(-9,6,-9,-7);g.closePath();g.fill();
+    g.fillStyle='#bfe4ff';g.beginPath();g.moveTo(0,-7);g.lineTo(5,-4.5);g.quadraticCurveTo(5,4,0,7);g.closePath();g.fill();
+  }else if(kind==='magnet'){
+    g.strokeStyle='#e04848';g.lineWidth=5;g.beginPath();g.arc(0,-1,6.5,Math.PI,0);g.lineTo(6.5,7);g.moveTo(-6.5,-1);g.lineTo(-6.5,7);g.stroke();
+    g.fillStyle='#cfd6e0';g.fillRect(-9,6,5,4);g.fillRect(4,6,5,4);
+  }
+  g.restore();
+}
+function drawPowerOnSheep(){
+  if(!power||sheep.dead)return;
+  const x=sheep.x,y=sheep.y;
+  if(power.kind==='umbrella'){
+    ctx.strokeStyle='#5a3a1a';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x+2,y-30);ctx.lineTo(x+2,y-62);ctx.stroke();
+    ctx.fillStyle='#ff6b8a';ctx.beginPath();ctx.arc(x+2,y-60,26,Math.PI,0);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#ffd0da';for(const dx of[-13,0,13]){ctx.beginPath();ctx.arc(x+2+dx,y-60,6.5,Math.PI,0);ctx.fill()}
+  }else if(power.kind==='shield'){
+    ctx.fillStyle='rgba(120,200,255,.18)';ctx.strokeStyle='rgba(140,210,255,.85)';ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.arc(x+2,y-22,34+Math.sin(time*6)*1.5,0,7);ctx.fill();ctx.stroke();
+  }else if(power.kind==='magnet'){
+    ctx.strokeStyle='rgba(224,72,72,.35)';ctx.lineWidth=2;
+    for(let i=0;i<2;i++){const r=((time*60+i*45)%90)+30;ctx.globalAlpha=1-(r-30)/90;ctx.beginPath();ctx.arc(x,y-20,r,0,7);ctx.stroke()}
+    ctx.globalAlpha=1;drawPowerIcon(ctx,'magnet',x,y-52,.9);
+  }else if(power.kind==='rocket'){
+    drawPowerIcon(ctx,'rocket',x-sheep.face*14,y-12,1.1);
+  }
+}
+function drawPowerHud(){
+  if(!power||state!=='play')return;
+  const x=16,y=boss.on?H-92:H-44;
+  ctx.fillStyle='rgba(255,255,255,.85)';ctx.beginPath();ctx.roundRect?ctx.roundRect(x,y,124,30,15):ctx.rect(x,y,124,30);ctx.fill();
+  drawPowerIcon(ctx,power.kind,x+16,y+15,.85);
+  ctx.fillStyle='#24304f';ctx.font='800 12px system-ui,sans-serif';ctx.textBaseline='middle';
+  ctx.fillText(t('pwN')[PW_ORDER.indexOf(power.kind)],x+32,y+10);
+  if(power.max!==Infinity){ctx.fillStyle='#d3e3f3';ctx.fillRect(x+32,y+19,80,5);ctx.fillStyle='#ff7a59';ctx.fillRect(x+32,y+19,80*Math.max(0,power.t/power.max),5)}
+}
+function drawBoss(){
+  const b=boss;if(!b.on)return;
+  // rayos
+  for(const z of b.bolts){
+    if(z.warn>0){
+      ctx.save();ctx.globalAlpha=.25+.25*Math.sin(time*30);ctx.fillStyle='#ffe066';ctx.fillRect(z.x-17,b.y,34,camY+H-b.y);ctx.restore();
+    }else{
+      ctx.save();ctx.strokeStyle='#fff6a8';ctx.lineWidth=7;ctx.shadowColor='#ffe066';ctx.shadowBlur=18;ctx.beginPath();
+      let yy=b.y+20;ctx.moveTo(z.x,yy);while(yy<camY+H){yy+=34;ctx.lineTo(z.x+rnd(-12,12),yy)}ctx.stroke();ctx.restore();
+    }
+  }
+  for(const h of b.hail){ctx.fillStyle='#cfefff';ctx.strokeStyle='#7fb8de';ctx.lineWidth=2;ctx.beginPath();ctx.arc(h.x,h.y,9,0,7);ctx.fill();ctx.stroke()}
+  // nube
+  ctx.save();ctx.translate(b.x,b.y);
+  const flash=b.hitT>0&&((time*20)|0)%2;
+  ctx.fillStyle=flash?'#ffffff':'#4b4a6e';
+  for(const [dx,dy,r] of [[-48,6,30],[-20,-12,38],[20,-14,36],[50,4,30],[0,12,38]]){ctx.beginPath();ctx.arc(dx,dy,r,0,7);ctx.fill()}
+  ctx.fillStyle=flash?'#ffffff':'#6a6990';
+  for(const [dx,dy,r] of [[-22,-22,22],[18,-24,20]]){ctx.beginPath();ctx.arc(dx,dy,r,0,7);ctx.fill()}
+  // cara enojada
+  const look=Math.max(-4,Math.min(4,(sheep.x-b.x)/30));
+  for(const ex of[-18,18]){
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(ex,0,10,11,0,0,7);ctx.fill();
+    ctx.fillStyle='#1d1b2e';ctx.beginPath();ctx.arc(ex+look,3,5,0,7);ctx.fill();
+  }
+  ctx.strokeStyle='#1d1b2e';ctx.lineWidth=4;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(-30,-14);ctx.lineTo(-8,-6);ctx.moveTo(30,-14);ctx.lineTo(8,-6);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(-14,22);ctx.lineTo(-7,17);ctx.lineTo(0,22);ctx.lineTo(7,17);ctx.lineTo(14,22);ctx.stroke();
+  ctx.restore();
+}
+function drawBossHud(){
+  if(!boss.on)return;
+  const w=200,x=(W-w)/2,y=H-40;
+  ctx.fillStyle='rgba(0,0,0,.45)';ctx.fillRect(x-4,y-18,w+8,32);
+  ctx.fillStyle='#fff';ctx.font='900 12px system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(t('bossName'),W/2,y-8);ctx.textAlign='left';
+  ctx.fillStyle='#3a3550';ctx.fillRect(x,y+2,w,8);
+  ctx.fillStyle='#ff5a7a';ctx.fillRect(x,y+2,w*boss.hp/boss.max,8);
+}
+function drawNebula(m){
+  const a=Math.min(1,Math.max(0,(m-3700)/400));
+  if(a<=0)return;
+  ctx.save();
+  const blobs=[[W*.25,.25,'255,90,170'],[W*.8,.55,'140,90,255'],[W*.4,.85,'60,200,255']];
+  for(const [bx,by,c] of blobs){
+    const y=((by*H*1.6-camY*.08)%(H*1.6)+H*1.6)%(H*1.6)-H*.3;
+    const g=ctx.createRadialGradient(bx,y,10,bx,y,180);g.addColorStop(0,`rgba(${c},${.35*a})`);g.addColorStop(1,`rgba(${c},0)`);
+    ctx.fillStyle=g;ctx.fillRect(bx-180,y-180,360,360);
+  }
+  const ga=Math.min(1,Math.max(0,(m-4400)/300));
+  if(ga>0){ // galaxia en espiral girando
+    ctx.translate(W*.7,H*.3);ctx.rotate(time*.05);
+    for(let i=0;i<140;i++){const arm=i%2,tt=i/140*6;const r=tt*14;const ang=tt+arm*Math.PI;
+      ctx.globalAlpha=ga*(1-tt/7);ctx.fillStyle=i%5?'#e9e0ff':'#ffd3f0';ctx.fillRect(Math.cos(ang)*r,Math.sin(ang)*r*.55,1.8,1.8)}
+  }
+  ctx.restore();
+}
 function draw(){
   ctx.setTransform(DPR*S,0,0,DPR*S,0,0);
   const m=Math.max(0,-camY/PX_PER_M-H*.5/PX_PER_M);
@@ -878,6 +1215,7 @@ function draw(){
     }
     ctx.restore();
   }
+  drawNebula(m);
   // nubes lejanas (paralaje)
   ctx.globalAlpha=.35*(1-night*.8);ctx.fillStyle='#ffffff';
   for(const c of farClouds){
@@ -890,15 +1228,19 @@ function draw(){
   ctx.save();ctx.translate(sx,-camY);
   for(const p of plats)drawPlat(p);
   for(const s of stars)drawStar(s);
+  for(const u of pups)if(!u.got)drawPup(u);
+  drawBoss();
   for(const q of parts){ctx.globalAlpha=Math.max(0,q.life);ctx.fillStyle=q.col;ctx.beginPath();ctx.arc(q.x,q.y,q.r,0,7);ctx.fill()}
   ctx.globalAlpha=1;
   for(const b of foes){if(b.kind==='bird')drawBird(b);else if(b.kind==='bat')drawBat(b);else drawMeteor(b)}
   if(sheep){
+    if(state==='play')drawPowerOnSheep();
     if(!(invuln>0&&((time*12)|0)%2))drawSheep(ctx,sheep);
     if(sheep.x<24)drawSheep(ctx,{...sheep,x:sheep.x+W+44});
     else if(sheep.x>W-24)drawSheep(ctx,{...sheep,x:sheep.x-W-44});
   }
   ctx.restore();
+  drawPowerHud();drawBossHud();
 }
 
 refreshWallet();
@@ -908,10 +1250,11 @@ function loop(now){
   requestAnimationFrame(loop);
 }
 reset();
+updateDots();
 requestAnimationFrame(loop);
 
 // ayuda para pruebas desde la consola
-window.__borrego={jump(m){maxH=m*PX_PER_M;sheep.y=-m*PX_PER_M;camY=sheep.y-H*.42;genY=Math.min(genY,sheep.y+200);plats=plats.filter(p=>p.y<sheep.y+H);plats.push({x:0,y:sheep.y+40,w:W,type:'n',ph:0});gen()},get state(){return state},set wallet(v){wallet=v;refreshWallet()}};
+window.__borrego={jump(m){maxH=m*PX_PER_M;sheep.y=-m*PX_PER_M;camY=sheep.y-H*.42;genY=Math.min(genY,sheep.y+200);plats=plats.filter(p=>p.y<sheep.y+H);plats.push({x:0,y:sheep.y+40,w:W,type:'n',ph:0});gen()},get state(){return state},set wallet(v){wallet=v;refreshWallet()},get sheep(){return sheep},power(k){givePower(k)},get boss(){return boss},get mis(){return missions()}};
 })();
 </script>
 </body></html>
