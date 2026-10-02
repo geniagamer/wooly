@@ -11,6 +11,8 @@ permissions:
 jobs:
   apk:
     runs-on: ubuntu-latest
+    env:
+      WOOLY_PASS: ${{ secrets.WOOLY_PASS }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,6 +29,15 @@ jobs:
         run: |
           echo "sdk.dir=$ANDROID_HOME" > local.properties
           chmod +x gradlew && ./gradlew assembleDebug --stacktrace
+      - name: Compilar AAB firmado para la Play Store
+        if: env.WOOLY_PASS != ''
+        env:
+          WOOLY_PASS: ${{ secrets.WOOLY_PASS }}
+        working-directory: android
+        run: |
+          openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -in wooly-upload.jks.enc -out "$RUNNER_TEMP/wooly.jks" -pass env:WOOLY_PASS
+          WOOLY_KEYSTORE="$RUNNER_TEMP/wooly.jks" ./gradlew bundleRelease
+          cp app/build/outputs/bundle/release/app-release.aab ../Wooly.aab
       - uses: actions/upload-artifact@v4
         with:
           name: wooly-apk
@@ -37,7 +48,7 @@ jobs:
         run: |
           cp android/app/build/outputs/apk/debug/app-debug.apk Wooly.apk
           gh release delete ultima --yes --cleanup-tag || true
-          gh release create ultima Wooly.apk --title "Wooly (última versión)" --notes "APK de prueba para instalar en Android." --latest
+          gh release create ultima Wooly.apk $( [ -f Wooly.aab ] && echo Wooly.aab ) --title "Wooly (última versión)" --notes "APK de prueba para instalar en Android." --latest
       - name: Guardar copia en la rama apk
         run: |
           git config user.name "github-actions"
@@ -45,5 +56,6 @@ jobs:
           git checkout --orphan apk
           git rm -rq --cached .
           git add -f Wooly.apk
+          [ -f Wooly.aab ] && git add -f Wooly.aab || true
           git commit -qm "APK de ${GITHUB_SHA::7}"
           git push -f origin apk

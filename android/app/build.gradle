@@ -16,8 +16,21 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    // Firma para la Play Store: la llave llega cifrada y GitHub la abre con el secreto WOOLY_PASS
+    signingConfigs {
+        release {
+            def ks = System.getenv("WOOLY_KEYSTORE")
+            if (ks) {
+                storeFile file(ks)
+                storePassword System.getenv("WOOLY_PASS")
+                keyAlias "wooly"
+                keyPassword System.getenv("WOOLY_PASS")
+            }
+        }
+    }
     buildTypes {
         release {
+            if (System.getenv("WOOLY_KEYSTORE")) signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
